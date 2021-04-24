@@ -1,7 +1,7 @@
 extends KinematicBody2D
 
-var transitionTimeMin = 1 # was 5
-var transitionTimeMax = 5 # was 10
+var transitionTimeMin = 0.2 # was 5
+var transitionTimeMax = 2 # was 10
 var speedMin = 140
 var speedMax = 250
 var attractionSpeed = 200
@@ -10,6 +10,7 @@ var age = 0 # number of turns
 var max_age = 10 # then they die. this number is replaced by randomizer
 var maxAgeMin=30
 var maxAgeMax=70
+var chance_of_not_eating=0.9
 var food_value=5
 var lastVec = null
 var nextVec = Vector2(0,0)
@@ -20,8 +21,10 @@ var critter_type = "fly"
 #var cannot_reproduce = true
 #var refractaryPeriodTime=4 # seconds
 var scaredSpeed=1.5
+var MainNode
 func _ready():
 	init("fly")
+	MainNode=get_parent().get_parent()
 #	$randomizeDir.start()
 
 #func _process(delta):
@@ -53,50 +56,23 @@ func _physics_process(delta):
 #			else:
 			velocity=velocity.bounce(collision.normal)
 		if collision.collider is TileMap:
-			# Find the character's position in tile coordinates
-			var tile_pos = collision.collider.world_to_map(position)
-			# Find the colliding tile position
-			tile_pos -= collision.normal
-			# Get the tile id
-			var tile_id = collision.collider.get_cellv(tile_pos)
-			if tile_id >= 3:
-				collision.collider.set_cellv(tile_pos, -1)
-				velocity=velocity.bounce(collision.normal)
-				
+			if randf() > chance_of_not_eating:
+				# Find the character's position in tile coordinates
+				var tile_pos = collision.collider.world_to_map(position)
+				# Find the colliding tile position
+				tile_pos -= collision.normal
+				# Get the tile id
+#				var tile_id = collision.collider.get_cellv(tile_pos)
+				MainNode.eatCell(tile_pos)
+#				if tile_id >= 3:
+#					velocity=velocity.bounce(collision.normal)
+#					collision.collider.set_cellv(tile_pos, -1)
+#				elif tile_id < 3:
+#	#				yield($eatCell, "timeout")
+#					collision.collider.set_cellv(tile_pos, tile_id+1)
 			else:
-				collision.collider.set_cellv(tile_pos, tile_id+1)
-#	if collision:
-#		if collision.collider.is_in_group("walls"):
-#			velocity=velocity.bounce(collision.normal)
-##			return
-##			print("colliding with walls")
-##		elif collision.collider.is_in_group("scare"):
-##			print("scared!")
-##			velocity=velocity.bounce(collision.normal)*scaredSpeed
-##			return
-#
-##			velocity=(global_position-collision.collider.global_position).normalized()*speedMax
-#		elif collision.collider.is_in_group("red"):
-#			if critter_type != "red":
-#				queue_free()
-#				collision.collider.set_age(-food_value)
-#				if critter_type == "blue":
-#					get_parent().elephants -= 1
-#				if critter_type == "green":
-#					get_parent().rabbits -= 1
-#				get_parent().update_pop_tot()
-#			else:
-#				velocity=velocity.bounce(collision.normal)
-#		elif collision.collider.is_in_group("green"):
-#			velocity = velocity.slide(collision.normal)
-##			if critter_type == "green":
-##				if not cannot_reproduce:
-###					if get_colliding_bodies().size()<=3:
-##						get_parent().spawn_green_at(global_position)
-##						just_reproduced()
-#		elif collision.collider.is_in_group("blue"):
-#			velocity = Vector2(0,0)
-#	move_and_slide(nextVec)
+				pass
+					
 func init(type="fly"):
 	max_age=rand_range(maxAgeMin,maxAgeMax)
 	if type == "fly":
@@ -105,8 +81,8 @@ func init(type="fly"):
 		add_to_group("flies")
 		critter_type = "fly"
 #		speedMax*=2
-		transitionTimeMax/=float(2)
-		transitionTimeMin/=float(2)
+#		transitionTimeMax/=float(2)
+#		transitionTimeMin/=float(2)
 #		max_age/=float(1.5)
 		scale=Vector2(4,4)		
 #	just_reproduced()

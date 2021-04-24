@@ -5,9 +5,10 @@ extends Node2D
 # var a = 2
 # var b = "text"
 var permanence = 0.4 #seconds
-
+export var radius = 2
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	scale=Vector2(radius,radius)
 	$Particles.emitting=true
 	$die.wait_time=Globals.attraction_permanence
 	$die.start()

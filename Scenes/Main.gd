@@ -109,7 +109,7 @@ func generate_starting_point():
 	# will need to find an empty space going row by row, checking that it is empty
 	# just delete a bunch of cells around starting point!!!
 	camera_target=starting_point
-	spawn_flies(10,starting_point)	
+	spawn_flies(Playervars.flies,starting_point)	
 func spawn_flies(numb=10,start_point=Vector2()):
 	var counter=0
 	var point=start_point
@@ -119,6 +119,7 @@ func spawn_flies(numb=10,start_point=Vector2()):
 	var D = true
 	var L = true
 	var U = true
+	# cant believe this junk works
 	while counter < numb:
 		if R:
 			point+=Vector2.RIGHT*counter
@@ -144,9 +145,7 @@ func spawn_flies(numb=10,start_point=Vector2()):
 			R = true
 			D = true
 			L = true
-			U = true
-
-		
+			U = true	
 func spawn_single_fly(pos):
 	var f = flyInst.instance()
 	$Flies.add_child(f)
@@ -162,3 +161,13 @@ func _input(event):
 func _on_touchIgnore_timeout():
 	touch_ignore=false
 	$touchIgnore.start()
+
+func eatCell(tile_pos):
+	var tile_id = $TileMap.get_cellv(tile_pos)
+	if tile_id == 3:
+#		velocity=velocity.bounce(collision.normal)
+		$TileMap.set_cellv(tile_pos, -500)#this is CRAZYYYY
+	elif tile_id < 3:
+#				yield($eatCell, "timeout")
+		$TileMap.set_cellv(tile_pos, tile_id+1)
+	
