@@ -30,5 +30,5 @@ func _on_die_timeout():
 func _on_Area2D_body_entered(body):
 #	body.velocity=body.velocity
 	if body.is_in_group("flies"):
-		body.velocity=(global_position-body.global_position).normalized()*body.speedMax
+		body.velocity=(global_position-body.global_position).normalized()*body.attractionSpeed
 	pass # Replace with function body.

@@ -1,5 +1,10 @@
 extends Node
 
+
+const attraction_permanence=0.6
+const starting_flies=32
+
+
 const sky_col=[
 	Color("#5c5185"),
 	Color("#6c7ba1"),
@@ -27,7 +32,6 @@ const enemies_col=[
 	Color("#FFD500")
 	]
 
-const attraction_permanence=0.6
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	pass # Replace with function body.
