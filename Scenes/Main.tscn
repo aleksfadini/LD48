@@ -285,6 +285,15 @@ points = PoolVector2Array( 0, 0, 32, 0, 32, 32, 0, 32 )
 [node name="Main" type="Node2D"]
 script = ExtResource( 2 )
 
+[node name="Parallax" type="ParallaxBackground" parent="."]
+
+[node name="Bg" type="ColorRect" parent="Parallax"]
+margin_right = 4000.0
+margin_bottom = 4000.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
 [node name="CamPos" type="Label" parent="CanvasLayer"]
@@ -300,6 +309,16 @@ __meta__ = {
 margin_top = 32.0
 margin_right = 108.0
 margin_bottom = 58.0
+theme = ExtResource( 3 )
+text = "Mouse Pos"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Test" type="Label" parent="CanvasLayer"]
+margin_top = 64.0
+margin_right = 108.0
+margin_bottom = 90.0
 theme = ExtResource( 3 )
 text = "Mouse Pos"
 __meta__ = {
@@ -322,4 +341,8 @@ wait_time = 0.1
 one_shot = true
 
 [node name="Flies" type="Node2D" parent="."]
+
+[node name="updateColor" type="Timer" parent="."]
+wait_time = 0.5
 [connection signal="timeout" from="touchIgnore" to="." method="_on_touchIgnore_timeout"]
+[connection signal="timeout" from="updateColor" to="." method="set_bg_color"]

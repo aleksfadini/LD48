@@ -2,7 +2,7 @@ extends Node2D
 # Window is 640*320
 const window_size=Vector2(640,320)
 # A level is 20 windows deep and 4 windows wide hence 1720*6400
-const map_in_px=Vector2(window_size.x*4,window_size.y*20)
+const map_in_px=Vector2(window_size.x*20,window_size.y*20)
 const map_in_tiles=map_in_px/32
 const cosmetic_particle_size=512
 const big_chunks_cap=0
@@ -15,8 +15,8 @@ var camera_speed=0.03
 var zoom_in_speed=0.01
 var zoom_out_speed=0.01
 var zoom_in=Vector2(1,1)
-var zoom_out=Vector2(1.5,1.5)
-#var zoom_out=Vector2(4,4)
+#var zoom_out=Vector2(1.5,1.5)
+var zoom_out=Vector2(8,8)
 # Scenes Preload
 var attractionPower=preload("res://Prefabs/attractionForce.tscn")
 var floatingBg=preload("res://Prefabs/FloatingThings.tscn")
@@ -25,18 +25,19 @@ var flyInst=preload("res://Prefabs/Fly.tscn")
 var noise
 var dragging=false
 var touch_ignore=false
+#var curr_bg_color=
 func _ready():
 	# Set Up bg
-	set_bg_color()
 	generate_fancy_bg()
 #	print(": ", map_in_tiles)
 	# Set Camera Boundaries
 	$Cam.limit_left=0
-	$Cam.limit_top=0
+	$Cam.limit_top=0-window_size.y*4 # so you can see the sky
 	$Cam.limit_right=map_in_px.x
 	$Cam.limit_bottom=map_in_px.y
 	generate_level()
 	generate_starting_point()
+	set_bg_color()
 func _process(delta):	
 	$CanvasLayer/CamPos.text="Cam Pos: " +str($Cam.global_position.x)+","+str($Cam.global_position.y)
 	$CanvasLayer/Mouse.text="Mouse Pos: " +str(get_global_mouse_position().x)+","+str(get_global_mouse_position().y)
@@ -48,12 +49,11 @@ func _process(delta):
 	else:
 		zoom_in_camera()
 		pass
+	set_bg_color()
 #	zoom_cam_based_on_speed()
 	$CanvasLayer/CamPos.text="Cam Pos: " +str($Cam.global_position.x)+","+str($Cam.global_position.y)
-#	$CanvasLayer/CamPos.text="zoom factor: " +str(clamp($Cam.global_position.distance_to(camera_target)/float(camera_zoom_tolerance),zoom_in.x,zoom_out.x))
 	$CanvasLayer/Mouse.text="Mouse Pos: " +str(get_global_mouse_position().x)+","+str(get_global_mouse_position().y)
-#	$CanvasLayer/Mouse.text="Mouse Pos: " +str($Cam.global_position.distance_to(camera_target))
-#	$CanvasLayer/CamPos.text="Cam Pos: " +str($Cam.global_position.x)+","+str($Cam.global_position.y)
+	$CanvasLayer/Test.text="Test: " +str($Cam.global_position.y/float(map_in_px.y))
 #func zoom_cam_ased_on_speed():
 #	var zoom_factor=clamp($Cam.global_position.distance_to(camera_target)/float(camera_zoom_tolerance),zoom_in.x,zoom_out.x)
 #	$Cam.zoom=lerp($Cam.zoom,Vector2(zoom_factor,zoom_factor),camera_zoom_by_speed_speed)
@@ -74,9 +74,13 @@ func control_cam_and_attract():
 		touch_ignore=true
 		$touchIgnore.start()
 
-func set_bg_color(level=0):
+func set_bg_color():
 	# Bg Color
-	VisualServer.set_default_clear_color(Globals.sky_col[5-level])
+#	VisualServer.set_default_clear_color(Globals.sky_col[5-level])
+	var levelInFloat=abs($Cam.global_position.y/float(map_in_px.y))
+	var level=floor(levelInFloat*5)
+	$Parallax/Bg.color=Globals.sky_col[5-level]
+	
 func generate_fancy_bg():
 	#generate every 256 pixels, so:
 #	var cosmetic_zoom=4#I like bigger particles
@@ -105,9 +109,23 @@ func make_big_chunks():
 				$TileMap.set_cell(x,y,0)		
 	$TileMap.update_bitmask_region(Vector2(0.0, 0.0), Vector2(map_in_tiles.x, map_in_tiles.y))
 func generate_starting_point():
-	var starting_point=Vector2(300,100)
+	var starting_point=Vector2(window_size.x*10-100,window_size.y*20-290)
 	# will need to find an empty space going row by row, checking that it is empty
 	# just delete a bunch of cells around starting point!!!
+	# convert starting_point to tile coordinates
+	var start_in_tiles_coords=starting_point/32
+	# delete tiles around it
+	# THIS IS WHY I AM STUPID
+	var tilesAroundStart=[-3,-2,-1,0,1,2,3]
+	for x in tilesAroundStart:
+		for y in tilesAroundStart:
+			if (not ((x==y and x>=3)) 
+			and (not (x==y and x<=-3))
+			and (not (x==-y and y>=3))
+			and (not (x==-y and y<=-3))):
+				var each_pos=Vector2(start_in_tiles_coords)+Vector2(x,y)
+				$TileMap.set_cellv(each_pos, -2000)
+	$Cam.global_position=starting_point
 	camera_target=starting_point
 	spawn_flies(Playervars.flies,starting_point)	
 func spawn_flies(numb=10,start_point=Vector2()):
@@ -163,11 +181,12 @@ func _on_touchIgnore_timeout():
 	$touchIgnore.start()
 
 func eatCell(tile_pos):
+	if true:
+		return
 	var tile_id = $TileMap.get_cellv(tile_pos)
 	if tile_id == 3:
 #		velocity=velocity.bounce(collision.normal)
-		$TileMap.set_cellv(tile_pos, -500)#this is CRAZYYYY
+		$TileMap.set_cellv(tile_pos, -2000)#this is CRAZYYYY
 	elif tile_id < 3:
 #				yield($eatCell, "timeout")
 		$TileMap.set_cellv(tile_pos, tile_id+1)
-	
