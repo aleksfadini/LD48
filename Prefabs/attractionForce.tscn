@@ -43,7 +43,7 @@ self_modulate = Color( 1, 1, 1, 0.458824 )
 anims/disappear = SubResource( 1 )
 
 [node name="Area2D" type="Area2D" parent="." groups=[
-"scare",
+"attractor",
 ]]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]

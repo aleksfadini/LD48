@@ -3,9 +3,20 @@ extends Node
 
 const attraction_permanence=0.6
 const starting_flies=32
+const egg_flies_min=2
+const egg_flies_max=10
 
 
 const sky_col=[
+	Color("#653D48"),
+	Color("#933F45"),
+	Color("#B25E46"),
+	Color("#CC925E"),
+	Color("#DACB80"),
+	Color("#F0E9C9")
+	]
+
+const sky_col_OLD=[
 	Color("#5c5185"),
 	Color("#6c7ba1"),
 	Color("#8eb4bd"),

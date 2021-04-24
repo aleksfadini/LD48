@@ -23,8 +23,11 @@ var critter_type = "fly"
 var scaredSpeed=1.5
 var MainNode
 func _ready():
-	init("fly")
 	MainNode=get_parent().get_parent()
+	init()
+	_on_randomizeDir_timeout()
+#	init("fly")
+#	$randomizeDir.start()	
 #	$randomizeDir.start()
 
 #func _process(delta):
@@ -73,20 +76,20 @@ func _physics_process(delta):
 			else:
 				pass
 					
-func init(type="fly"):
+func init():
 	max_age=rand_range(maxAgeMin,maxAgeMax)
-	if type == "fly":
-		$Sprite.self_modulate= Color(0,0,0)
+#	if type == "fly":
+	$Sprite.self_modulate= Color(0,0,0)
 #		$ActualSprite.self_modulate= Color(1,0,0)
-		add_to_group("flies")
-		critter_type = "fly"
+#		add_to_group("flies")
+#		critter_type = "fly"
 #		speedMax*=2
 #		transitionTimeMax/=float(2)
 #		transitionTimeMin/=float(2)
 #		max_age/=float(1.5)
-		scale=Vector2(4,4)		
+#		scale=Vector2(4,4)		
 #	just_reproduced()
-	$randomizeDir.start()
+#	$randomizeDir.start()
 	
 	
 func randomizeNextVec():

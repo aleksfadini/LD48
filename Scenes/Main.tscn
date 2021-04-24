@@ -297,8 +297,9 @@ __meta__ = {
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
 [node name="CamPos" type="Label" parent="CanvasLayer"]
-margin_right = 40.0
-margin_bottom = 14.0
+margin_top = 224.0
+margin_right = 84.0
+margin_bottom = 250.0
 theme = ExtResource( 3 )
 text = "Cam Pos"
 __meta__ = {
@@ -306,9 +307,9 @@ __meta__ = {
 }
 
 [node name="Mouse" type="Label" parent="CanvasLayer"]
-margin_top = 32.0
+margin_top = 256.0
 margin_right = 108.0
-margin_bottom = 58.0
+margin_bottom = 282.0
 theme = ExtResource( 3 )
 text = "Mouse Pos"
 __meta__ = {
@@ -316,9 +317,28 @@ __meta__ = {
 }
 
 [node name="Test" type="Label" parent="CanvasLayer"]
-margin_top = 64.0
+margin_top = 288.0
 margin_right = 108.0
-margin_bottom = 90.0
+margin_bottom = 314.0
+theme = ExtResource( 3 )
+text = "Mouse Pos"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Flies" type="Label" parent="CanvasLayer"]
+margin_right = 108.0
+margin_bottom = 26.0
+theme = ExtResource( 3 )
+text = "Mouse Pos"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Poop" type="Label" parent="CanvasLayer"]
+margin_top = 32.0
+margin_right = 108.0
+margin_bottom = 58.0
 theme = ExtResource( 3 )
 text = "Mouse Pos"
 __meta__ = {
@@ -342,7 +362,14 @@ one_shot = true
 
 [node name="Flies" type="Node2D" parent="."]
 
+[node name="PickUps" type="Node2D" parent="."]
+
 [node name="updateColor" type="Timer" parent="."]
 wait_time = 0.5
+
+[node name="updateLabels" type="Timer" parent="."]
+wait_time = 0.2
+autostart = true
 [connection signal="timeout" from="touchIgnore" to="." method="_on_touchIgnore_timeout"]
 [connection signal="timeout" from="updateColor" to="." method="set_bg_color"]
+[connection signal="timeout" from="updateLabels" to="." method="_on_updateLabels_timeout"]
