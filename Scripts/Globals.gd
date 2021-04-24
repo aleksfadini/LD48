@@ -5,7 +5,8 @@ const attraction_permanence=0.6
 const starting_flies=32
 const egg_flies_min=2
 const egg_flies_max=10
-
+const eggs_chance=0.01
+var game_won=false
 
 const sky_col=[
 	Color("#653D48"),

@@ -1,8 +1,11 @@
-[gd_scene load_steps=25 format=2]
+[gd_scene load_steps=26 format=2]
 
 [ext_resource path="res://Graphics/Tiles.png" type="Texture" id=1]
 [ext_resource path="res://Scenes/Main.gd" type="Script" id=2]
 [ext_resource path="res://Themes/UITheme.tres" type="Theme" id=3]
+
+[sub_resource type="RectangleShape2D" id=22]
+extents = Vector2( 30000, 4000 )
 
 [sub_resource type="ConvexPolygonShape2D" id=1]
 points = PoolVector2Array( 0, 0, 32, 0, 32, 32, 0, 32 )
@@ -348,6 +351,14 @@ __meta__ = {
 [node name="Cam" type="Camera2D" parent="."]
 current = true
 
+[node name="Triggers" type="Node2D" parent="."]
+
+[node name="WinTrigger" type="Area2D" parent="Triggers"]
+position = Vector2( 0, -4300 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Triggers/WinTrigger"]
+shape = SubResource( 22 )
+
 [node name="FancyBg" type="Node2D" parent="."]
 
 [node name="TileMap" type="TileMap" parent="."]
@@ -370,6 +381,7 @@ wait_time = 0.5
 [node name="updateLabels" type="Timer" parent="."]
 wait_time = 0.2
 autostart = true
+[connection signal="body_entered" from="Triggers/WinTrigger" to="." method="_on_WinTrigger_body_entered"]
 [connection signal="timeout" from="touchIgnore" to="." method="_on_touchIgnore_timeout"]
 [connection signal="timeout" from="updateColor" to="." method="set_bg_color"]
 [connection signal="timeout" from="updateLabels" to="." method="_on_updateLabels_timeout"]

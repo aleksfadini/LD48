@@ -2,6 +2,7 @@ extends Node2D
 # Window is 640*320
 const window_size=Vector2(640,320)
 # A level is 20 windows deep and 4 windows wide hence 1720*6400
+#const map_in_px=Vector2(window_size.x*5,window_size.y*5)
 const map_in_px=Vector2(window_size.x*20,window_size.y*20)
 const map_in_tiles=map_in_px/32
 const cosmetic_particle_size=512
@@ -9,7 +10,6 @@ const cosmetic_particle_size=512
 const big_chunks_cap=0
 const eggs_min_cap=0.4
 const eggs_max_cap=0.6
-const eggs_chance=0.9
 # Camera Section
 var camera_target=map_in_px/2
 var camera_target_tolerance=3
@@ -18,10 +18,11 @@ var camera_speed=0.03
 #var camera_zoom_tolerance=50#within these pixels it will zoom in
 var zoom_in_speed=0.01
 var zoom_out_speed=0.01
-var zoom_in=Vector2(1,1)
-var zoom_out=Vector2(1.5,1.5)
+#var zoom_in=Vector2(1,1)
+var zoom_in=Vector2(4,4)
+#var zoom_out=Vector2(1.5,1.5)
 #var zoom_out=Vector2(4,4)
-#var zoom_out=Vector2(8,8)
+var zoom_out=Vector2(8,8)
 # Scenes Preload
 var attractionPower=preload("res://Prefabs/attractionForce.tscn")
 var floatingBg=preload("res://Prefabs/FloatingThings.tscn")
@@ -33,6 +34,8 @@ var dragging=false
 var touch_ignore=false
 #var curr_bg_color=
 func _ready():
+	# reset vars
+	Globals.game_won=false
 	# Set Up bg
 	generate_fancy_bg()
 #	print(": ", map_in_tiles)
@@ -44,21 +47,25 @@ func _ready():
 	generate_level()
 	generate_starting_point()
 	set_bg_color()
-func _process(delta):	
-	$CanvasLayer/CamPos.text="Cam Pos: " +str($Cam.global_position.x)+","+str($Cam.global_position.y)
-	$CanvasLayer/Mouse.text="Mouse Pos: " +str(get_global_mouse_position().x)+","+str(get_global_mouse_position().y)
-	if dragging:
-		control_cam_and_attract()
-	if $Cam.position.distance_to(camera_target) >= camera_target_tolerance:
-		zoom_out_camera()
-		move_camera_to_position(camera_target)
+func _process(delta):
+	if not Globals.game_won:
+		$CanvasLayer/CamPos.text="Cam Pos: " +str($Cam.global_position.x)+","+str($Cam.global_position.y)
+		$CanvasLayer/Mouse.text="Mouse Pos: " +str(get_global_mouse_position().x)+","+str(get_global_mouse_position().y)
+		if dragging:
+			control_cam_and_attract()
+		if $Cam.position.distance_to(camera_target) >= camera_target_tolerance:
+			zoom_out_camera()
+			move_camera_to_position(camera_target)
+		else:
+			zoom_in_camera()
+			pass
 	else:
-		zoom_in_camera()
-		pass
-	set_bg_color()
+		move_camera_to_position(camera_target)
+		zoom_out_camera()
+#	set_bg_color()
 #	zoom_cam_based_on_speed()
-	$CanvasLayer/CamPos.text="Cam Pos: " +str($Cam.global_position.x)+","+str($Cam.global_position.y)
-	$CanvasLayer/Mouse.text="Mouse Pos: " +str(get_global_mouse_position().x)+","+str(get_global_mouse_position().y)
+#	$CanvasLayer/CamPos.text="Cam Pos: " +str($Cam.global_position.x)+","+str($Cam.global_position.y)
+#	$CanvasLayer/Mouse.text="Mouse Pos: " +str(get_global_mouse_position().x)+","+str(get_global_mouse_position().y)
 #	$CanvasLayer/Test.text="Test: " +str($Cam.global_position.y/float(map_in_px.y))
 #func zoom_cam_ased_on_speed():
 #	var zoom_factor=clamp($Cam.global_position.distance_to(camera_target)/float(camera_zoom_tolerance),zoom_in.x,zoom_out.x)
@@ -69,6 +76,8 @@ func zoom_in_camera():
 	if $Cam.zoom.x > (zoom_in.x):
 		$Cam.zoom=lerp($Cam.zoom,zoom_in,zoom_in_speed)
 func zoom_out_camera():
+	if Globals.game_won:
+		zoom_out=Vector2(20,20)
 	if $Cam.zoom.x < (zoom_out.x):
 		$Cam.zoom=lerp($Cam.zoom,zoom_out,zoom_out_speed)
 func control_cam_and_attract():
@@ -121,12 +130,14 @@ func lay_eggs():
 			var a = noise.get_noise_2d(x,y)
 #			if a > big_chunks_cap and a < eggs_cap:
 			if a > eggs_min_cap and a < eggs_max_cap:
-				print("Trying to spawn egg, a: ", a)
-				if randf() >= eggs_chance:
+#				print("Trying to spawn egg, a: ", a)
+				var true_eggs_chance= Globals.eggs_chance*(y/float(map_in_tiles.y))
+#				print("true egg_chance: ", true_eggs_chance)
+				if randf() <= true_eggs_chance:
 					var pos=Vector2(x,y)*32+Vector2(16,16)
 #				var pos=Vector2(x+16,y+16)
 #				$TileMap.set_cell(x,y,0)
-					print("egg at: ", pos)
+#					print("egg at: ", pos)
 					var f = eggInst.instance()
 					$PickUps.add_child(f)
 #				f.init()
@@ -134,7 +145,8 @@ func lay_eggs():
 
 
 func generate_starting_point():
-	var starting_point=Vector2(window_size.x*10-100,window_size.y*20-290)
+	var starting_point=Vector2(window_size.x-100,window_size.y*2-290)
+#	var starting_point=Vector2(window_size.x*10-100,window_size.y*20-290)
 	# will need to find an empty space going row by row, checking that it is empty
 	# just delete a bunch of cells around starting point!!!
 	# convert starting_point to tile coordinates
@@ -160,6 +172,7 @@ func spawn_flies(numb=10,start_point=Vector2()):
 		var rand_x = rand_range(-boundary,boundary)
 		var rand_y = rand_range(-boundary,boundary)
 		var point = Vector2(rand_x,rand_y)+start_point
+#		print("spawning fly at: ", point)
 		spawn_single_fly(point)
 	
 #	var counter=0
@@ -220,7 +233,7 @@ func eatCell(tile_pos):
 	var tile_id = $TileMap.get_cellv(tile_pos)
 	if tile_id == 3:
 #		velocity=velocity.bounce(collision.normal)
-		$TileMap.set_cellv(tile_pos, -2000)#this is CRAZYYYY
+		$TileMap.set_cellv(tile_pos, -999999999)#this is CRAZYYYY
 	elif tile_id < 3:
 #				yield($eatCell, "timeout")
 		$TileMap.set_cellv(tile_pos, tile_id+1)
@@ -235,3 +248,18 @@ func _on_updateLabels_timeout():
 	$CanvasLayer/Flies.text="Flies: " +str(flies)
 	
 	pass # Replace with function body.
+
+
+func _on_WinTrigger_body_entered(body):
+	if body.is_in_group("flies") and body.is_visible() and $Triggers/WinTrigger.is_visible():
+			var notif=VisibilityNotifier2D.new()
+			body.add_child(notif)
+			notif.connect("screen_entered",self,"game_won",[body.global_position])
+#			if notif.is_on_screen():
+			pass
+	pass # Replace with function body.
+func game_won(pos):
+	print("game won!!!", pos)
+	Globals.game_won=true
+	camera_target=pos
+	
