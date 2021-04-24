@@ -11,10 +11,10 @@ const big_chunks_cap=0
 var camera_target=map_in_px/2
 var camera_target_tolerance=3
 var camera_speed=0.05
-var camera_zoom_by_speed_speed=0.03
-var camera_zoom_tolerance=50#within these pixels it will zoom in
-#var zoom_in_speed=0.01
-#var zoom_out_speed=0.04
+#var camera_zoom_by_speed_speed=0.03
+#var camera_zoom_tolerance=50#within these pixels it will zoom in
+var zoom_in_speed=0.01
+var zoom_out_speed=0.04
 var zoom_in=Vector2(1,1)
 var zoom_out=Vector2(1.5,1.5)
 #var zoom_out=Vector2(4,4)
@@ -43,28 +43,28 @@ func _process(delta):
 	if dragging:
 		control_cam_and_attract()
 	if $Cam.position.distance_to(camera_target) >= camera_target_tolerance:
-#		zoom_out_camera()
+		zoom_out_camera()
 		move_camera_to_position(camera_target)
-#	else:
-#		zoom_in_camera()
-#		pass
-	zoom_cam_based_on_speed()
+	else:
+		zoom_in_camera()
+		pass
+#	zoom_cam_based_on_speed()
 #	$CanvasLayer/CamPos.text="Cam Pos: " +str($Cam.global_position.x)+","+str($Cam.global_position.y)
-	$CanvasLayer/CamPos.text="zoom factor: " +str(clamp($Cam.global_position.distance_to(camera_target)/float(camera_zoom_tolerance),zoom_in.x,zoom_out.x))
+#	$CanvasLayer/CamPos.text="zoom factor: " +str(clamp($Cam.global_position.distance_to(camera_target)/float(camera_zoom_tolerance),zoom_in.x,zoom_out.x))
 #	$CanvasLayer/Mouse.text="Mouse Pos: " +str(get_global_mouse_position().x)+","+str(get_global_mouse_position().y)
-	$CanvasLayer/Mouse.text="Mouse Pos: " +str($Cam.global_position.distance_to(camera_target))
+#	$CanvasLayer/Mouse.text="Mouse Pos: " +str($Cam.global_position.distance_to(camera_target))
 #	$CanvasLayer/CamPos.text="Cam Pos: " +str($Cam.global_position.x)+","+str($Cam.global_position.y)
-func zoom_cam_based_on_speed():
-	var zoom_factor=clamp($Cam.global_position.distance_to(camera_target)/float(camera_zoom_tolerance),zoom_in.x,zoom_out.x)
-	$Cam.zoom=lerp($Cam.zoom,Vector2(zoom_factor,zoom_factor),camera_zoom_by_speed_speed)
+#func zoom_cam_based_on_speed():
+#	var zoom_factor=clamp($Cam.global_position.distance_to(camera_target)/float(camera_zoom_tolerance),zoom_in.x,zoom_out.x)
+#	$Cam.zoom=lerp($Cam.zoom,Vector2(zoom_factor,zoom_factor),camera_zoom_by_speed_speed)
 func move_camera_to_position(target):
 	$Cam.position=lerp($Cam.position,target,camera_speed)
-#func zoom_in_camera():
-#	if $Cam.zoom.x > (zoom_in.x):
-#		$Cam.zoom=lerp($Cam.zoom,zoom_in,zoom_in_speed)
-#func zoom_out_camera():
-#	if $Cam.zoom.x < (zoom_out.x):
-#		$Cam.zoom=lerp($Cam.zoom,zoom_out,zoom_out_speed)
+func zoom_in_camera():
+	if $Cam.zoom.x > (zoom_in.x):
+		$Cam.zoom=lerp($Cam.zoom,zoom_in,zoom_in_speed)
+func zoom_out_camera():
+	if $Cam.zoom.x < (zoom_out.x):
+		$Cam.zoom=lerp($Cam.zoom,zoom_out,zoom_out_speed)
 func control_cam_and_attract():
 	camera_target = get_global_mouse_position()
 	if not touch_ignore:
