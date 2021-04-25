@@ -2,8 +2,8 @@ extends KinematicBody2D
 
 var transitionTimeMin = 0.2 # was 5
 var transitionTimeMax = 2 # was 10
-var speedMin = 140
-var speedMax = 250
+var speedMin = 130
+var speedMax = 220
 var attractionSpeed = 200
 var maxVelocity = 200
 var scale_young=Vector2(4,4)
@@ -86,6 +86,15 @@ func init():
 #	max_age=rand_range(maxAgeMin,maxAgeMax)
 #	if type == "fly":
 	$Sprite.self_modulate= Color(0,0,0)
+	if Playervars.laser_flies:
+		if randf() >= Globals.laser_flies_percentage:
+			$LaserEffect.show()
+			$LaserEffect/AnimationPlayer.play("laserEffect")
+			speedMin+=Globals.laser_flies_speed_boost
+			speedMax+=Globals.laser_flies_speed_boost
+		
+	else:
+		pass
 #		$ActualSprite.self_modulate= Color(1,0,0)
 #		add_to_group("flies")
 #		critter_type = "fly"

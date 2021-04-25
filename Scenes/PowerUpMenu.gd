@@ -25,7 +25,7 @@ func init():
 	$power2.init()
 	
 func pick_rand_powers():
-	var powerUps=Globals.powerUps.duplicate()
+	var powerUps=Playervars.possiblePowers.duplicate()
 	var rand_i=randi()%powerUps.size()
 	power1=powerUps[rand_i]
 	powerUps.remove(rand_i)

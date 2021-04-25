@@ -23,6 +23,7 @@ config/icon="res://icon.png"
 [autoload]
 
 Assets="*res://Scripts/assets.gd"
+Txt="*res://Scripts/txt.gd"
 Globals="*res://Scripts/Globals.gd"
 Playervars="*res://Scripts/Playervars.gd"
 

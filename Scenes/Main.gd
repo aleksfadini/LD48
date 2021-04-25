@@ -40,10 +40,11 @@ var power_to_be_applied=""
 var ten_more_flies=0
 #var curr_bg_color=
 func _ready():
+	Playervars.reset_vars()
+	update_poo_bar()
 	deactivate_all_menus()
 	# reset vars
 	apply_power_after_pause=false
-	Playervars.reset_vars()
 #	zoom_out=Playervars.zoom_out
 	# Connect Buttons
 	$CanvasLayer/Pause.get_child(1).connect("pressed",self,"launch_pause_menu")
@@ -102,7 +103,21 @@ func control_cam_and_attract():
 		s.global_position=get_global_mouse_position()
 		touch_ignore=true
 		$touchIgnore.start()
-
+func update_poo_bar():
+	var cur_poo=Playervars.poop
+	var max_poo= $CanvasLayer/Poop/TextureProgress.max_value
+	$CanvasLayer/Poop/TextureProgress.value=cur_poo
+	if cur_poo >= max_poo*0.8:
+		$CanvasLayer/Poop/TextureProgress.tint_progress=Globals.poo_colors[3]
+	if cur_poo >= max_poo*0.6:
+		$CanvasLayer/Poop/TextureProgress.tint_progress=Globals.poo_colors[2]
+	if cur_poo >= max_poo*0.4:
+		$CanvasLayer/Poop/TextureProgress.tint_progress=Globals.poo_colors[1]
+	if cur_poo >= max_poo*0.2:
+		$CanvasLayer/Poop/TextureProgress.tint_progress=Globals.poo_colors[0]	#add color
+func rescale_poo_bar(min_val):
+	$CanvasLayer/Poop/TextureProgress.min_value=min_val
+	$CanvasLayer/Poop/TextureProgress.max_value=Playervars.poop_to_level[0]
 func set_bg_color():
 	# Bg Color
 #	VisualServer.set_default_clear_color(Globals.sky_col[5-level])
@@ -174,12 +189,12 @@ func lay_eggs():
 #				print("Trying to spawn egg, a: ", a)
 				var true_eggs_chance= Globals.eggs_chance*(y/float(map_in_tiles.y))
 #				var true_egg_chance = max(true_eggs_chance,0.01)
-				print("true egg_chance: ", true_eggs_chance)
+#				print("true egg_chance: ", true_eggs_chance)
 				if randf() <= true_eggs_chance:
 					var pos=Vector2(x,y)*32+Vector2(16,16)
 #				var pos=Vector2(x+16,y+16)
 #				$TileMap.set_cell(x,y,0)
-					print("egg at: ", pos)
+#					print("egg at: ", pos)
 					var f = eggInst.instance()
 					$PickUps.add_child(f)
 #				f.init()
@@ -268,7 +283,8 @@ func _input(event):
 		dragging=false
 	if event.is_action_released("ui_accept"):
 #		game_won(Vector2(0,0))
-		game_lost()
+#		game_lost()
+		fly_talks()
 #		get_tree().reload_current_scene()
 func _on_touchIgnore_timeout():
 	touch_ignore=false
@@ -304,6 +320,25 @@ func spawn_5_flies(pos):
 	spawn_single_fly(vect2)
 	spawn_single_fly(vect3)
 	spawn_single_fly(vect4)
+
+func fly_talks():
+	# instead of position, it should be a fly position at some point
+	var posit=get_global_mouse_position()
+	var start_point = posit
+	var mid_point = Vector2(20,50)
+	var end_point = Vector2(-200,-50)
+	var small_r = Vector2(rand_range(-5,5),rand_range(-5,5))
+	var mid_r = Vector2(rand_range(-20,20),rand_range(-20,20))
+	var big_r = Vector2(rand_range(-50,50),rand_range(-50,50))
+	var r_start_point = start_point+mid_r
+	var r_mid_point = mid_point+small_r+big_r
+	var r_end_point = end_point+big_r
+	# Second, substitute them in the animation
+	var position_anim_track = $PUAnim.get_animation("grow_and_disappear")
+	position_anim_track.track_set_key_value(2,0,r_start_point)
+	position_anim_track.track_set_key_value(2,1,r_mid_point)
+	position_anim_track.track_set_key_value(2,2,r_end_point)
+	
 # buttons functions
 func launch_pause_menu():
 	if not Globals.another_menu_already:
@@ -315,14 +350,17 @@ func resume_from_menu():
 	$CanvasLayer/MsgCont/msg.play_backwards("resume_inverse")
 
 func _on_updateLabels_timeout():
-	$CanvasLayer/Poop.text="Poo: " +str(Playervars.poop)
+	update_poo_bar()	
+	$CanvasLayer/Poop/Label.text="Poo: " +str(Playervars.poop)
 	if Playervars.poop>=Playervars.poop_to_level[0]:
+		var min_val=Playervars.poop_to_level[0]
 		Playervars.poop_to_level.remove(0)
 #		Playervars.poop=0
 #		deactivate_all_menus()
 		$CanvasLayer/MsgCont/MsgBox/PowerUpMenu.show()
 		$CanvasLayer/MsgCont/MsgBox/PowerUpMenu.init()
 		show_msg()
+		rescale_poo_bar(min_val)
 	var flies=$Flies.get_child_count()
 	$CanvasLayer/Flies.text="Flies: " +str(flies)
 	if flies == 0 and Globals.game_active:
@@ -396,12 +434,15 @@ func apply_power():
 		Playervars.attraction_radius+=0.5
 	if power_to_be_applied=="stronger flies":
 		Playervars.fly_max_age+=5
-	if power_to_be_applied=="gather more poo":
+	if power_to_be_applied=="gather poo faster":
 		Playervars.poo_per_cell+=1
 	if power_to_be_applied=="more fruitful eggs":
 		Playervars.flies_in_one_egg+=10
 	if power_to_be_applied=="clairvoyance in the poo":
 		Playervars.zoom_out+=Vector2(0.5,0.5)
+	if power_to_be_applied=="laser-powered flies":
+		Playervars.laser_flies=true
+		Playervars.possiblePowers.erase("laser-powered flies")
 	power_to_be_applied="nothing"	
 
 

@@ -13,11 +13,20 @@ const attraction_radius=1.5
 const poop_to_level=[100,200,400,800,1200,1700,2500,3000,4000,6000,8000,12000]
 const zoom_out=Vector2(1.5,1.5)
 const poo_per_cell=1
+const laser_flies=false
+const laser_flies_percentage=0.5#based on 1
+const laser_flies_speed_boost=70#based on 1
 #const min_abs_eggs_chance=0.05
 var game_active=true
 var another_menu_already=false
-const powerUps=["ten more flies","stronger pheromones","stronger flies","gather more poo", "more fruitful eggs","clairvoyance in the poo"]
+const possiblePowers=["ten more flies","stronger pheromones","stronger flies","gather poo faster", "more fruitful eggs","clairvoyance in the poo", "laser-powered flies"]
 
+const poo_colors=[
+	Color(71,36,0,1),
+	Color(86,44,1,1),
+	Color(96,49,0,1),
+	Color(116,59,0,1)
+	]
 
 const sky_col=[
 	Color("#653D48"),
@@ -45,7 +54,7 @@ const fly_col=[
 	Color("#D29465"),
 	Color("#E4C996")
 	]
-	
+
 const enemies_col=[
 	Color("#FF1600"),
 	Color("#FF3A00"),
