@@ -46,7 +46,70 @@ const powerUpSentences=[
 	"I'm getting old!"
 	]
 
-const introInstructions="I cannot tell you how to do it. The FLIES will tell you."
+const introSpeech="  " +\
+	"\n\n\n\n\n" +\
+	"You.\n" +\
+	"Have been chosen.\n" +\
+	"Within you,\n"+\
+	"The Flame of\n"+\
+	"The Spirit\n"+\
+	"Of Escrement\n"+\
+	"Glows Bright.\n"+\
+	"Lead the flies upwards\n"+\
+	"out of the Mythical Mountain of Manure\n"+\
+	"in which they are trapped.\n"+\
+	"An evil monster,\n"+\
+	"the Groclocloclotrl!\n" +\
+	"(it's pronounced gro-oh-ca-le-ca-lo-ca-rtk-wbnxzktr-ou-ou-ua-ua-ua-uuuuu-t-arrrrrr-l.)\n" +\
+	"This monster\n" +\
+	"trapped the flies deeper and deeper\n" +\
+	"(wink wink LD48)\n" +\
+	"into the Depths of Chasms of Poo\n" +\
+	"\n" +\
+	"\n" +\
+	"I cannot tell you how to do it.\n" +\
+	"\n" +\
+	"The FLIES will tell you.\n" +\
+	"\n" +\
+	"\n" +\
+	"\n" +\
+	"\n" +\
+	"\n" +\
+	"\n" +\
+	"\n" +\
+	"\n" +\
+	"\n" +\
+	"what are you waiting for?\n" +\
+	"" +\
+	"" +\
+	"\n" +\
+	"\n" +\
+	"\n" +\
+	"\n" +\
+	"\n" +\
+	"\n" +\
+	"\n" +\
+	"\n" +\
+	"" +\
+	"" +\
+	"" +\
+	"" +\
+	"" +\
+	"the voice is over\n" +\
+	"" +\
+	"\n" +\
+	"\n" +\
+	"\n" +\
+	"\n" +\
+	"\n" +\
+	"\n" +\
+	"\n" +\
+	"" +\
+	"" +\
+	"" +\
+	"hit the skip button already!!!!\n" +\
+	"\n" +\
+	""
 func _ready():
 	pass # Replace with function body.
 

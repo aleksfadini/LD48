@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://Themes/UITheme.tres" type="Theme" id=1]
 [ext_resource path="res://Scenes/TitleScreen.gd" type="Script" id=2]
@@ -9,7 +9,52 @@
 [ext_resource path="res://Prefabs/FloatingThings.tscn" type="PackedScene" id=7]
 
 [sub_resource type="Animation" id=1]
-resource_name = "show"
+resource_name = "fade_in"
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.3 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 1 ) ]
+}
+
+[sub_resource type="Animation" id=2]
+resource_name = "fade_in"
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.3 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 1 ) ]
+}
+
+[sub_resource type="Animation" id=3]
+resource_name = "slideup"
+length = 60.0
+tracks/0/type = "value"
+tracks/0/path = NodePath("Bg/SpeechContainer:scroll_horizontal")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 60 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ 0, 4000 ]
+}
+
+[sub_resource type="Animation" id=4]
 length = 2.0
 tracks/0/type = "value"
 tracks/0/path = NodePath("MegaTitle:rect_position")
@@ -147,6 +192,7 @@ margin_bottom = 70.532
 label = "start level"
 
 [node name="Intro" type="Control" parent="CanvasLayer"]
+visible = false
 margin_right = 40.0
 margin_bottom = 40.0
 theme = ExtResource( 1 )
@@ -157,6 +203,9 @@ __meta__ = {
 [node name="Bg" type="Control" parent="CanvasLayer/Intro"]
 margin_right = 40.0
 margin_bottom = 40.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="ColorRect" type="ColorRect" parent="CanvasLayer/Intro/Bg"]
 self_modulate = Color( 0, 0, 0, 1 )
@@ -185,27 +234,112 @@ scale = Vector2( 0.1, 0.1 )
 position = Vector2( 233.333, 153.333 )
 scale = Vector2( 0.1, 0.1 )
 
-[node name="ScrollContainer" type="ScrollContainer" parent="CanvasLayer/Intro/Bg"]
-margin_left = 16.0
+[node name="SpeechContainer" type="ScrollContainer" parent="CanvasLayer/Intro/Bg"]
+margin_left = 48.0
 margin_top = 16.0
-margin_right = 616.0
-margin_bottom = 296.0
-rect_min_size = Vector2( 600, 280 )
-theme = ExtResource( 1 )
+margin_right = 848.0
+margin_bottom = 216.0
 scroll_horizontal_enabled = false
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Label" type="Label" parent="CanvasLayer/Intro/Bg/ScrollContainer"]
-margin_right = 600.0
+[node name="Speech" type="Label" parent="CanvasLayer/Intro/Bg/SpeechContainer"]
+margin_right = 540.0
 margin_bottom = 4000.0
-rect_min_size = Vector2( 600, 4000 )
+rect_min_size = Vector2( 540, 4000 )
 text = "whole
 speech
+whole
+speech
+whole
+speech
+whole
+speech
+whole
+speech
+whole
+speech
+whole
+speech
+whole
+speechwhole
+speech
+whole
+speech
+wholewhole
+speech
+whole
+speech
+wholewhole
+speech
+whole
+speech
+wholewhole
+speech
+whole
+speech
+wholewhole
+speech
+whole
+speech
+wholewhole
+speech
+whole
+speech
+wholewhole
+speech
+whole
+speech
+wholewhole
+speech
+whole
+speech
+wholewhole
+speech
+whole
+speech
+wholewhole
+speech
+whole
+speech
+wholewhole
+speech
+whole
+speech
+wholewhole
+speech
+whole
+speech
+wholewhole
+speech
+whole
+speech
+whole
+whole
+speech
 "
+align = 1
 autowrap = true
 clip_text = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="skip" parent="CanvasLayer/Intro" instance=ExtResource( 5 )]
+modulate = Color( 1, 1, 1, 0.529412 )
+margin_left = 320.0
+margin_top = 240.0
+margin_right = 320.0
+margin_bottom = 240.0
+label = "skip"
+
+[node name="intro" type="AnimationPlayer" parent="CanvasLayer/Intro"]
+anims/fade_in = SubResource( 1 )
+
+[node name="text_slide" type="AnimationPlayer" parent="CanvasLayer/Intro"]
+anims/fade_in = SubResource( 2 )
+anims/slideup = SubResource( 3 )
 
 [node name="Control3" type="Control" parent="CanvasLayer"]
 margin_right = 40.0
@@ -214,6 +348,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="intro" type="AnimationPlayer" parent="CanvasLayer"]
+[node name="open" type="AnimationPlayer" parent="CanvasLayer"]
 autoplay = "show"
-anims/show = SubResource( 1 )
+anims/show = SubResource( 4 )
+[connection signal="animation_finished" from="CanvasLayer/Intro/intro" to="." method="_on_intro_animation_finished"]
