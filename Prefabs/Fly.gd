@@ -6,10 +6,14 @@ var speedMin = 140
 var speedMax = 250
 var attractionSpeed = 200
 var maxVelocity = 200
+var scale_young=Vector2(4,4)
+var scale_adult=Vector2(5,5)
+var scale_nymph=Vector2(3,3)
 var age = 0 # number of turns
-var max_age = 10 # then they die. this number is replaced by randomizer
-var maxAgeMin=30
-var maxAgeMax=70
+var max_age = Playervars.fly_max_age # then they die. this number is replaced by randomizer
+#var age = 
+#var maxAgeMin=30
+#var maxAgeMax=70
 var chance_of_not_eating=0.9
 var food_value=5
 var lastVec = null
@@ -22,6 +26,7 @@ var critter_type = "fly"
 #var refractaryPeriodTime=4 # seconds
 var scaredSpeed=1.5
 var MainNode
+#var justborn=true
 func _ready():
 	MainNode=get_parent().get_parent()
 	init()
@@ -30,6 +35,7 @@ func _ready():
 #	$randomizeDir.start()	
 #	$randomizeDir.start()
 
+#func _process(delta):
 #func _process(delta):
 func _physics_process(delta):
 	# This code is just for choosing target positions, in your game just use your tiles
@@ -77,7 +83,7 @@ func _physics_process(delta):
 				pass
 					
 func init():
-	max_age=rand_range(maxAgeMin,maxAgeMax)
+#	max_age=rand_range(maxAgeMin,maxAgeMax)
 #	if type == "fly":
 	$Sprite.self_modulate= Color(0,0,0)
 #		$ActualSprite.self_modulate= Color(1,0,0)
@@ -122,4 +128,25 @@ func _on_randomizeDir_timeout():
 	randomizeNextVec()
 	$randomizeDir.wait_time = rand_range(transitionTimeMin,transitionTimeMax)
 	$randomizeDir.start()
-	pass # Replace with function body.
+	check_fly_age()
+
+func check_fly_age():
+	if age>=max_age*0.8:
+#		scale*=2
+		scale=scale_adult
+		$Sprite.self_modulate=Color(0.4,0.4,0.4)
+	elif age>=max_age*0.6:
+#		scale*=2
+		scale=scale_adult
+		$Sprite.self_modulate=Color(0.2,0.2,0.2)
+	elif age>=max_age*0.4:
+#		scale*=2
+		scale=scale_adult
+		$Sprite.self_modulate=Color(0,0,0)
+	elif age>=max_age*0.2:
+#		scale*=2
+		scale=scale_young
+		$Sprite.self_modulate=Color(0,0,0)
+	else:
+		scale=scale_nymph
+		$Sprite.self_modulate=Color(0,0,0)

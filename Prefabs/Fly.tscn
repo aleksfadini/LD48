@@ -9,7 +9,6 @@ extents = Vector2( 1, 1 )
 [node name="Fly" type="KinematicBody2D" groups=[
 "flies",
 ]]
-scale = Vector2( 4, 4 )
 script = ExtResource( 2 )
 
 [node name="Sprite" type="Sprite" parent="."]
@@ -22,4 +21,5 @@ position = Vector2( 1, 1 )
 shape = SubResource( 1 )
 
 [node name="randomizeDir" type="Timer" parent="."]
+one_shot = true
 [connection signal="timeout" from="randomizeDir" to="." method="_on_randomizeDir_timeout"]

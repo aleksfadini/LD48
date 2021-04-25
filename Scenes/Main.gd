@@ -35,7 +35,7 @@ var touch_ignore=false
 #var curr_bg_color=
 func _ready():
 	# reset vars
-	Globals.game_active=true
+	Playervars.reset_vars()
 	# Set Up bg
 	generate_fancy_bg()
 #	print(": ", map_in_tiles)
@@ -47,7 +47,7 @@ func _ready():
 	generate_level()
 	generate_starting_point()
 	set_bg_color()
-func _process(delta):
+func _physics_process(delta):
 	if Globals.game_active:
 		$CanvasLayer/CamPos.text="Cam Pos: " +str($Cam.global_position.x)+","+str($Cam.global_position.y)
 		$CanvasLayer/Mouse.text="Mouse Pos: " +str(get_global_mouse_position().x)+","+str(get_global_mouse_position().y)
@@ -178,6 +178,7 @@ func spawn_flies(numb=10,start_point=Vector2()):
 		var point = Vector2(rand_x,rand_y)+start_point
 #		print("spawning fly at: ", point)
 		spawn_single_fly(point)
+#		spawn_single_fly(start_point)
 	
 #	var counter=0
 #	var point=start_point
@@ -216,9 +217,9 @@ func spawn_flies(numb=10,start_point=Vector2()):
 #			U = true	
 func spawn_single_fly(pos):
 	var f = flyInst.instance()
+	f.global_position=pos
 	$Flies.add_child(f)
 #	f.init()
-	f.global_position=pos
 func _input(event):
 	if event.is_action_pressed("ui_click"):
 		dragging= true
@@ -226,8 +227,8 @@ func _input(event):
 		dragging=false
 	if event.is_action_released("ui_accept"):
 #		game_won(Vector2(0,0))
-#		game_lost()
-		get_tree().reload_current_scene()
+		game_lost()
+#		get_tree().reload_current_scene()
 func _on_touchIgnore_timeout():
 	touch_ignore=false
 	$touchIgnore.start()
@@ -241,19 +242,34 @@ func eatCell(tile_pos):
 #		velocity=velocity.bounce(collision.normal)
 		Playervars.poop+=1
 		$TileMap.set_cellv(tile_pos, -999999999)#this is CRAZYYYY
-	elif tile_id < 3:
+	elif 0 <= tile_id and tile_id < 3:
 #				yield($eatCell, "timeout")
 		$TileMap.set_cellv(tile_pos, tile_id+1)
 func spawn_flies_from_egg(egg_position):
+#	spawn_5_flies(egg_position)
+
 	var number_of_flies=rand_range(Globals.egg_flies_min,Globals.egg_flies_max)
 	spawn_flies(number_of_flies,egg_position)
-
+#despreate attempt to optimize
+func spawn_5_flies(pos):
+	var dist=4
+	var vect0=pos
+	var vect1=pos+dist*Vector2.RIGHT
+	var vect2=pos+dist*Vector2.LEFT
+	var vect3=pos+dist*Vector2.UP
+	var vect4=pos+dist*Vector2.DOWN
+	spawn_single_fly(vect0)
+	spawn_single_fly(vect1)
+	spawn_single_fly(vect2)
+	spawn_single_fly(vect3)
+	spawn_single_fly(vect4)
+	
 
 func _on_updateLabels_timeout():
 	$CanvasLayer/Poop.text="P-energy: " +str(Playervars.poop)
 	var flies=$Flies.get_child_count()
 	$CanvasLayer/Flies.text="Flies: " +str(flies)
-	if flies == 0:
+	if flies == 0 and Globals.game_active:
 		game_lost()
 	
 	pass # Replace with function body.

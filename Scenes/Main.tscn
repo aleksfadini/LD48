@@ -18,10 +18,22 @@ tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0, 0.6, 0.9 ),
-"transitions": PoolRealArray( 2, 0.5, 1 ),
+"times": PoolRealArray( 0, 0.7, 0.9 ),
+"transitions": PoolRealArray( -2, 0.5, 1 ),
 "update": 0,
-"values": [ Vector2( 0, 600 ), Vector2( 0, 120 ), Vector2( 0, 100 ) ]
+"values": [ Vector2( 320, 600 ), Vector2( 320, 160 ), Vector2( 320, 250 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("MsgBox:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.7, 0.9 ),
+"transitions": PoolRealArray( -2, 0.5, 1 ),
+"update": 0,
+"values": [ Vector2( 0.1, 0.1 ), Vector2( 1, 1 ), Vector2( 0.75, 0.75 ) ]
 }
 
 [sub_resource type="RectangleShape2D" id=1]
@@ -391,12 +403,12 @@ __meta__ = {
 
 [node name="MsgBox" type="Node2D" parent="CanvasLayer/MsgCont"]
 visible = false
-position = Vector2( 0, 100 )
+position = Vector2( 320, 250 )
+scale = Vector2( 0.75, 0.75 )
 
 [node name="Bg" type="Node2D" parent="CanvasLayer/MsgCont/MsgBox"]
 
 [node name="Particles" type="Node2D" parent="CanvasLayer/MsgCont/MsgBox/Bg"]
-position = Vector2( 320, 168 )
 
 [node name="poop" type="CPUParticles2D" parent="CanvasLayer/MsgCont/MsgBox/Bg/Particles"]
 self_modulate = Color( 0.278431, 0.141176, 0, 1 )
@@ -409,10 +421,10 @@ scale_amount = 4.0
 scale_amount_curve = SubResource( 23 )
 
 [node name="ColorRect" type="ColorRect" parent="CanvasLayer/MsgCont/MsgBox/Bg"]
-margin_left = 120.0
-margin_top = 50.0
-margin_right = 520.0
-margin_bottom = 250.0
+margin_left = -200.0
+margin_top = -100.0
+margin_right = 200.0
+margin_bottom = 100.0
 color = Color( 0.278431, 0.141176, 0, 1 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -420,7 +432,6 @@ __meta__ = {
 
 [node name="flies" type="CPUParticles2D" parent="CanvasLayer/MsgCont/MsgBox/Bg"]
 self_modulate = Color( 0, 0, 0, 1 )
-position = Vector2( 320, 168 )
 amount = 64
 randomness = 1.0
 local_coords = false
@@ -436,35 +447,31 @@ scale_amount = 4.0
 
 [node name="YouWin" type="Node2D" parent="CanvasLayer/MsgCont/MsgBox"]
 visible = false
-position = Vector2( 224, 96 )
 
 [node name="Label" type="Label" parent="CanvasLayer/MsgCont/MsgBox/YouWin"]
-margin_left = -32.0
-margin_top = -4.0
-margin_right = 196.0
-margin_bottom = 109.0
+margin_left = -96.0
+margin_top = -56.0
+margin_right = 132.0
+margin_bottom = 57.0
 text = "You Win!!
 You are
 the
 Lord Of The Flies!!"
 align = 1
+valign = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="YouLose" type="Node2D" parent="CanvasLayer/MsgCont/MsgBox"]
 visible = false
-position = Vector2( 224, 96 )
 
 [node name="Label" type="Label" parent="CanvasLayer/MsgCont/MsgBox/YouLose"]
-margin_left = -32.0
-margin_top = -4.0
-margin_right = 196.0
-margin_bottom = 109.0
-text = "You Win!!
-You are
-the
-Lord Of The Flies!!"
+margin_left = -96.0
+margin_top = -56.0
+margin_right = 132.0
+margin_bottom = 57.0
+text = "You Lost!"
 align = 1
 __meta__ = {
 "_edit_use_anchors_": false
@@ -501,6 +508,7 @@ one_shot = true
 
 [node name="updateColor" type="Timer" parent="."]
 wait_time = 0.5
+autostart = true
 
 [node name="updateLabels" type="Timer" parent="."]
 wait_time = 0.2

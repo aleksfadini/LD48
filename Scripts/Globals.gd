@@ -3,9 +3,10 @@ extends Node
 
 const attraction_permanence=0.6
 const starting_flies=1
+const fly_max_age=20
 const egg_flies_min=2
-const egg_flies_max=10
-const eggs_chance=0.05
+const egg_flies_max=8
+const eggs_chance=0.1#Was 0.05
 #const min_abs_eggs_chance=0.05
 var game_active=true
 

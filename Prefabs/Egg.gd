@@ -6,6 +6,7 @@ extends Node2D
 # var b = "text"
 var in_the_screen=false
 var MainNode
+var already_hatched=false
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	MainNode=get_parent().get_parent()
@@ -25,7 +26,8 @@ func _ready():
 
 func _on_Area2D_body_entered(body):
 	if body.is_in_group("flies"):
-		if in_the_screen:
+		if in_the_screen and not already_hatched:
+			already_hatched=true
 			MainNode.spawn_flies_from_egg(global_position)
 			queue_free()
 	pass # Replace with function body.
