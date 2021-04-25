@@ -1,14 +1,31 @@
-[gd_scene load_steps=26 format=2]
+[gd_scene load_steps=29 format=2]
 
 [ext_resource path="res://Graphics/Tiles.png" type="Texture" id=1]
 [ext_resource path="res://Scenes/Main.gd" type="Script" id=2]
 [ext_resource path="res://Themes/UITheme.tres" type="Theme" id=3]
+[ext_resource path="res://Audio/Temp.ogg" type="AudioStream" id=4]
 
-[sub_resource type="RectangleShape2D" id=22]
+[sub_resource type="Curve" id=23]
+max_value = 50.0
+_data = [ Vector2( 0, 0 ), 0.0, 0.0, 0, 0, Vector2( 0.199275, 25.6944 ), 0.0, 0.0, 0, 0, Vector2( 0.615942, 19.213 ), 0.0, 0.0, 0, 0, Vector2( 1, 0 ), 0.0, 0.0, 0, 0 ]
+
+[sub_resource type="Animation" id=24]
+resource_name = "show"
+tracks/0/type = "value"
+tracks/0/path = NodePath("MsgBox:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.6, 0.9 ),
+"transitions": PoolRealArray( 2, 0.5, 1 ),
+"update": 0,
+"values": [ Vector2( 0, 600 ), Vector2( 0, 120 ), Vector2( 0, 100 ) ]
+}
+
+[sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 30000, 4000 )
-
-[sub_resource type="ConvexPolygonShape2D" id=1]
-points = PoolVector2Array( 0, 0, 32, 0, 32, 32, 0, 32 )
 
 [sub_resource type="ConvexPolygonShape2D" id=2]
 points = PoolVector2Array( 0, 0, 32, 0, 32, 32, 0, 32 )
@@ -67,7 +84,10 @@ points = PoolVector2Array( 0, 0, 32, 0, 32, 32, 0, 32 )
 [sub_resource type="ConvexPolygonShape2D" id=20]
 points = PoolVector2Array( 0, 0, 32, 0, 32, 32, 0, 32 )
 
-[sub_resource type="TileSet" id=21]
+[sub_resource type="ConvexPolygonShape2D" id=21]
+points = PoolVector2Array( 0, 0, 32, 0, 32, 32, 0, 32 )
+
+[sub_resource type="TileSet" id=22]
 0/name = "Tiles.png 0"
 0/texture = ExtResource( 1 )
 0/tex_offset = Vector2( 0, 0 )
@@ -87,38 +107,38 @@ points = PoolVector2Array( 0, 0, 32, 0, 32, 32, 0, 32 )
 0/navigation_offset = Vector2( 0, 0 )
 0/shape_offset = Vector2( 0, 0 )
 0/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
-0/shape = SubResource( 1 )
+0/shape = SubResource( 2 )
 0/shape_one_way = false
 0/shape_one_way_margin = 1.0
 0/shapes = [ {
 "autotile_coord": Vector2( 1, 0 ),
 "one_way": false,
 "one_way_margin": 1.0,
-"shape": SubResource( 1 ),
+"shape": SubResource( 2 ),
 "shape_transform": Transform2D( 1, 0, 0, 1, 0, 0 )
 }, {
 "autotile_coord": Vector2( 1, 0 ),
 "one_way": false,
 "one_way_margin": 1.0,
-"shape": SubResource( 2 ),
+"shape": SubResource( 3 ),
 "shape_transform": Transform2D( 1, 0, 0, 1, 0, 0 )
 }, {
 "autotile_coord": Vector2( 0, 0 ),
 "one_way": false,
 "one_way_margin": 1.0,
-"shape": SubResource( 3 ),
+"shape": SubResource( 4 ),
 "shape_transform": Transform2D( 1, 0, 0, 1, 0, 0 )
 }, {
 "autotile_coord": Vector2( 2, 0 ),
 "one_way": false,
 "one_way_margin": 1.0,
-"shape": SubResource( 4 ),
+"shape": SubResource( 5 ),
 "shape_transform": Transform2D( 1, 0, 0, 1, 0, 0 )
 }, {
 "autotile_coord": Vector2( 3, 0 ),
 "one_way": false,
 "one_way_margin": 1.0,
-"shape": SubResource( 5 ),
+"shape": SubResource( 6 ),
 "shape_transform": Transform2D( 1, 0, 0, 1, 0, 0 )
 } ]
 0/z_index = 0
@@ -141,32 +161,32 @@ points = PoolVector2Array( 0, 0, 32, 0, 32, 32, 0, 32 )
 1/navigation_offset = Vector2( 0, 0 )
 1/shape_offset = Vector2( 0, 0 )
 1/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
-1/shape = SubResource( 6 )
+1/shape = SubResource( 7 )
 1/shape_one_way = false
 1/shape_one_way_margin = 1.0
 1/shapes = [ {
 "autotile_coord": Vector2( 0, 0 ),
 "one_way": false,
 "one_way_margin": 1.0,
-"shape": SubResource( 6 ),
+"shape": SubResource( 7 ),
 "shape_transform": Transform2D( 1, 0, 0, 1, 0, 0 )
 }, {
 "autotile_coord": Vector2( 1, 0 ),
 "one_way": false,
 "one_way_margin": 1.0,
-"shape": SubResource( 7 ),
+"shape": SubResource( 8 ),
 "shape_transform": Transform2D( 1, 0, 0, 1, 0, 0 )
 }, {
 "autotile_coord": Vector2( 2, 0 ),
 "one_way": false,
 "one_way_margin": 1.0,
-"shape": SubResource( 8 ),
+"shape": SubResource( 9 ),
 "shape_transform": Transform2D( 1, 0, 0, 1, 0, 0 )
 }, {
 "autotile_coord": Vector2( 3, 0 ),
 "one_way": false,
 "one_way_margin": 1.0,
-"shape": SubResource( 9 ),
+"shape": SubResource( 10 ),
 "shape_transform": Transform2D( 1, 0, 0, 1, 0, 0 )
 } ]
 1/z_index = 0
@@ -189,16 +209,10 @@ points = PoolVector2Array( 0, 0, 32, 0, 32, 32, 0, 32 )
 2/navigation_offset = Vector2( 0, 0 )
 2/shape_offset = Vector2( 0, 0 )
 2/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
-2/shape = SubResource( 10 )
+2/shape = SubResource( 11 )
 2/shape_one_way = false
 2/shape_one_way_margin = 1.0
 2/shapes = [ {
-"autotile_coord": Vector2( 3, 0 ),
-"one_way": false,
-"one_way_margin": 1.0,
-"shape": SubResource( 10 ),
-"shape_transform": Transform2D( 1, 0, 0, 1, 0, 0 )
-}, {
 "autotile_coord": Vector2( 3, 0 ),
 "one_way": false,
 "one_way_margin": 1.0,
@@ -211,22 +225,28 @@ points = PoolVector2Array( 0, 0, 32, 0, 32, 32, 0, 32 )
 "shape": SubResource( 12 ),
 "shape_transform": Transform2D( 1, 0, 0, 1, 0, 0 )
 }, {
-"autotile_coord": Vector2( 0, 0 ),
+"autotile_coord": Vector2( 3, 0 ),
 "one_way": false,
 "one_way_margin": 1.0,
 "shape": SubResource( 13 ),
 "shape_transform": Transform2D( 1, 0, 0, 1, 0, 0 )
 }, {
-"autotile_coord": Vector2( 1, 0 ),
+"autotile_coord": Vector2( 0, 0 ),
 "one_way": false,
 "one_way_margin": 1.0,
 "shape": SubResource( 14 ),
 "shape_transform": Transform2D( 1, 0, 0, 1, 0, 0 )
 }, {
-"autotile_coord": Vector2( 2, 0 ),
+"autotile_coord": Vector2( 1, 0 ),
 "one_way": false,
 "one_way_margin": 1.0,
 "shape": SubResource( 15 ),
+"shape_transform": Transform2D( 1, 0, 0, 1, 0, 0 )
+}, {
+"autotile_coord": Vector2( 2, 0 ),
+"one_way": false,
+"one_way_margin": 1.0,
+"shape": SubResource( 16 ),
 "shape_transform": Transform2D( 1, 0, 0, 1, 0, 0 )
 } ]
 2/z_index = 0
@@ -249,38 +269,38 @@ points = PoolVector2Array( 0, 0, 32, 0, 32, 32, 0, 32 )
 3/navigation_offset = Vector2( 0, 0 )
 3/shape_offset = Vector2( 0, 0 )
 3/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
-3/shape = SubResource( 16 )
+3/shape = SubResource( 17 )
 3/shape_one_way = false
 3/shape_one_way_margin = 1.0
 3/shapes = [ {
 "autotile_coord": Vector2( 0, 0 ),
 "one_way": false,
 "one_way_margin": 1.0,
-"shape": SubResource( 16 ),
+"shape": SubResource( 17 ),
 "shape_transform": Transform2D( 1, 0, 0, 1, 0, 0 )
 }, {
 "autotile_coord": Vector2( 0, 0 ),
 "one_way": false,
 "one_way_margin": 1.0,
-"shape": SubResource( 17 ),
+"shape": SubResource( 18 ),
 "shape_transform": Transform2D( 1, 0, 0, 1, 0, 0 )
 }, {
 "autotile_coord": Vector2( 1, 0 ),
 "one_way": false,
 "one_way_margin": 1.0,
-"shape": SubResource( 18 ),
+"shape": SubResource( 19 ),
 "shape_transform": Transform2D( 1, 0, 0, 1, 0, 0 )
 }, {
 "autotile_coord": Vector2( 2, 0 ),
 "one_way": false,
 "one_way_margin": 1.0,
-"shape": SubResource( 19 ),
+"shape": SubResource( 20 ),
 "shape_transform": Transform2D( 1, 0, 0, 1, 0, 0 )
 }, {
 "autotile_coord": Vector2( 3, 0 ),
 "one_way": false,
 "one_way_margin": 1.0,
-"shape": SubResource( 20 ),
+"shape": SubResource( 21 ),
 "shape_transform": Transform2D( 1, 0, 0, 1, 0, 0 )
 } ]
 3/z_index = 0
@@ -300,6 +320,7 @@ __meta__ = {
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
 [node name="CamPos" type="Label" parent="CanvasLayer"]
+visible = false
 margin_top = 224.0
 margin_right = 84.0
 margin_bottom = 250.0
@@ -310,6 +331,7 @@ __meta__ = {
 }
 
 [node name="Mouse" type="Label" parent="CanvasLayer"]
+visible = false
 margin_top = 256.0
 margin_right = 108.0
 margin_bottom = 282.0
@@ -324,7 +346,17 @@ margin_top = 288.0
 margin_right = 108.0
 margin_bottom = 314.0
 theme = ExtResource( 3 )
-text = "Mouse Pos"
+text = "spacebar to reload, click and drag to play"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="hint" type="Label" parent="CanvasLayer"]
+margin_top = 256.0
+margin_right = 504.0
+margin_bottom = 282.0
+theme = ExtResource( 3 )
+text = "HINT: go up!!"
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -339,14 +371,107 @@ __meta__ = {
 }
 
 [node name="Poop" type="Label" parent="CanvasLayer"]
-margin_top = 32.0
-margin_right = 108.0
-margin_bottom = 58.0
+margin_left = 448.0
+margin_right = 556.0
+margin_bottom = 26.0
 theme = ExtResource( 3 )
 text = "Mouse Pos"
+align = 2
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="MsgCont" type="Control" parent="CanvasLayer"]
+margin_right = 40.0
+margin_bottom = 40.0
+theme = ExtResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="MsgBox" type="Node2D" parent="CanvasLayer/MsgCont"]
+visible = false
+position = Vector2( 0, 100 )
+
+[node name="Bg" type="Node2D" parent="CanvasLayer/MsgCont/MsgBox"]
+
+[node name="Particles" type="Node2D" parent="CanvasLayer/MsgCont/MsgBox/Bg"]
+position = Vector2( 320, 168 )
+
+[node name="poop" type="CPUParticles2D" parent="CanvasLayer/MsgCont/MsgBox/Bg/Particles"]
+self_modulate = Color( 0.278431, 0.141176, 0, 1 )
+amount = 128
+lifetime = 2.0
+emission_shape = 2
+emission_rect_extents = Vector2( 250, 150 )
+gravity = Vector2( 0, 0 )
+scale_amount = 4.0
+scale_amount_curve = SubResource( 23 )
+
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer/MsgCont/MsgBox/Bg"]
+margin_left = 120.0
+margin_top = 50.0
+margin_right = 520.0
+margin_bottom = 250.0
+color = Color( 0.278431, 0.141176, 0, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="flies" type="CPUParticles2D" parent="CanvasLayer/MsgCont/MsgBox/Bg"]
+self_modulate = Color( 0, 0, 0, 1 )
+position = Vector2( 320, 168 )
+amount = 64
+randomness = 1.0
+local_coords = false
+emission_shape = 2
+emission_rect_extents = Vector2( 300, 200 )
+spread = 180.0
+gravity = Vector2( 0, 0 )
+initial_velocity = 40.0
+initial_velocity_random = 0.8
+tangential_accel = 100.0
+tangential_accel_random = 1.0
+scale_amount = 4.0
+
+[node name="YouWin" type="Node2D" parent="CanvasLayer/MsgCont/MsgBox"]
+visible = false
+position = Vector2( 224, 96 )
+
+[node name="Label" type="Label" parent="CanvasLayer/MsgCont/MsgBox/YouWin"]
+margin_left = -32.0
+margin_top = -4.0
+margin_right = 196.0
+margin_bottom = 109.0
+text = "You Win!!
+You are
+the
+Lord Of The Flies!!"
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="YouLose" type="Node2D" parent="CanvasLayer/MsgCont/MsgBox"]
+visible = false
+position = Vector2( 224, 96 )
+
+[node name="Label" type="Label" parent="CanvasLayer/MsgCont/MsgBox/YouLose"]
+margin_left = -32.0
+margin_top = -4.0
+margin_right = 196.0
+margin_bottom = 109.0
+text = "You Win!!
+You are
+the
+Lord Of The Flies!!"
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="msg" type="AnimationPlayer" parent="CanvasLayer/MsgCont"]
+anims/show = SubResource( 24 )
 
 [node name="Cam" type="Camera2D" parent="."]
 current = true
@@ -357,15 +482,14 @@ current = true
 position = Vector2( 0, -4300 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Triggers/WinTrigger"]
-shape = SubResource( 22 )
+shape = SubResource( 1 )
 
 [node name="FancyBg" type="Node2D" parent="."]
 
 [node name="TileMap" type="TileMap" parent="."]
-tile_set = SubResource( 21 )
+tile_set = SubResource( 22 )
 cell_size = Vector2( 32, 32 )
 format = 1
-tile_data = PoolIntArray( 0, 0, 0, 19, 0, 0, 589824, 0, 0 )
 
 [node name="touchIgnore" type="Timer" parent="."]
 wait_time = 0.1
@@ -381,6 +505,10 @@ wait_time = 0.5
 [node name="updateLabels" type="Timer" parent="."]
 wait_time = 0.2
 autostart = true
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 4 )
+autoplay = true
 [connection signal="body_entered" from="Triggers/WinTrigger" to="." method="_on_WinTrigger_body_entered"]
 [connection signal="timeout" from="touchIgnore" to="." method="_on_touchIgnore_timeout"]
 [connection signal="timeout" from="updateColor" to="." method="set_bg_color"]

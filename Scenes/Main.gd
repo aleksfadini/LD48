@@ -18,11 +18,11 @@ var camera_speed=0.03
 #var camera_zoom_tolerance=50#within these pixels it will zoom in
 var zoom_in_speed=0.01
 var zoom_out_speed=0.01
-#var zoom_in=Vector2(1,1)
-var zoom_in=Vector2(4,4)
-#var zoom_out=Vector2(1.5,1.5)
+var zoom_in=Vector2(1,1)
+#var zoom_in=Vector2(4,4)
+var zoom_out=Vector2(1.5,1.5)
 #var zoom_out=Vector2(4,4)
-var zoom_out=Vector2(8,8)
+#var zoom_out=Vector2(8,8)
 # Scenes Preload
 var attractionPower=preload("res://Prefabs/attractionForce.tscn")
 var floatingBg=preload("res://Prefabs/FloatingThings.tscn")
@@ -35,7 +35,7 @@ var touch_ignore=false
 #var curr_bg_color=
 func _ready():
 	# reset vars
-	Globals.game_won=false
+	Globals.game_active=true
 	# Set Up bg
 	generate_fancy_bg()
 #	print(": ", map_in_tiles)
@@ -48,7 +48,7 @@ func _ready():
 	generate_starting_point()
 	set_bg_color()
 func _process(delta):
-	if not Globals.game_won:
+	if Globals.game_active:
 		$CanvasLayer/CamPos.text="Cam Pos: " +str($Cam.global_position.x)+","+str($Cam.global_position.y)
 		$CanvasLayer/Mouse.text="Mouse Pos: " +str(get_global_mouse_position().x)+","+str(get_global_mouse_position().y)
 		if dragging:
@@ -76,7 +76,7 @@ func zoom_in_camera():
 	if $Cam.zoom.x > (zoom_in.x):
 		$Cam.zoom=lerp($Cam.zoom,zoom_in,zoom_in_speed)
 func zoom_out_camera():
-	if Globals.game_won:
+	if not Globals.game_active:
 		zoom_out=Vector2(20,20)
 	if $Cam.zoom.x < (zoom_out.x):
 		$Cam.zoom=lerp($Cam.zoom,zoom_out,zoom_out_speed)
@@ -132,12 +132,13 @@ func lay_eggs():
 			if a > eggs_min_cap and a < eggs_max_cap:
 #				print("Trying to spawn egg, a: ", a)
 				var true_eggs_chance= Globals.eggs_chance*(y/float(map_in_tiles.y))
-#				print("true egg_chance: ", true_eggs_chance)
+#				var true_egg_chance = max(true_eggs_chance,0.01)
+				print("true egg_chance: ", true_eggs_chance)
 				if randf() <= true_eggs_chance:
 					var pos=Vector2(x,y)*32+Vector2(16,16)
 #				var pos=Vector2(x+16,y+16)
 #				$TileMap.set_cell(x,y,0)
-#					print("egg at: ", pos)
+					print("egg at: ", pos)
 					var f = eggInst.instance()
 					$PickUps.add_child(f)
 #				f.init()
@@ -145,8 +146,11 @@ func lay_eggs():
 
 
 func generate_starting_point():
-	var starting_point=Vector2(window_size.x-100,window_size.y*2-290)
-#	var starting_point=Vector2(window_size.x*10-100,window_size.y*20-290)
+#	var starting_point=Vector2(window_size.x-100,window_size.y*2-290)
+#	var starting_point=Vector2(window_size.x*3-100,window_size.y*5-290)
+
+# final:
+	var starting_point=Vector2(window_size.x*10-100,window_size.y*20-290)
 	# will need to find an empty space going row by row, checking that it is empty
 	# just delete a bunch of cells around starting point!!!
 	# convert starting_point to tile coordinates
@@ -221,6 +225,8 @@ func _input(event):
 	if event.is_action_released("ui_click"):
 		dragging=false
 	if event.is_action_released("ui_accept"):
+#		game_won(Vector2(0,0))
+#		game_lost()
 		get_tree().reload_current_scene()
 func _on_touchIgnore_timeout():
 	touch_ignore=false
@@ -233,6 +239,7 @@ func eatCell(tile_pos):
 	var tile_id = $TileMap.get_cellv(tile_pos)
 	if tile_id == 3:
 #		velocity=velocity.bounce(collision.normal)
+		Playervars.poop+=1
 		$TileMap.set_cellv(tile_pos, -999999999)#this is CRAZYYYY
 	elif tile_id < 3:
 #				yield($eatCell, "timeout")
@@ -246,12 +253,14 @@ func _on_updateLabels_timeout():
 	$CanvasLayer/Poop.text="P-energy: " +str(Playervars.poop)
 	var flies=$Flies.get_child_count()
 	$CanvasLayer/Flies.text="Flies: " +str(flies)
+	if flies == 0:
+		game_lost()
 	
 	pass # Replace with function body.
 
 
 func _on_WinTrigger_body_entered(body):
-	if body.is_in_group("flies") and body.is_visible() and $Triggers/WinTrigger.is_visible():
+	if Globals.game_active and body.is_in_group("flies") and body.is_visible() and $Triggers/WinTrigger.is_visible():
 			var notif=VisibilityNotifier2D.new()
 			body.add_child(notif)
 			notif.connect("screen_entered",self,"game_won",[body.global_position])
@@ -259,7 +268,19 @@ func _on_WinTrigger_body_entered(body):
 			pass
 	pass # Replace with function body.
 func game_won(pos):
-	print("game won!!!", pos)
-	Globals.game_won=true
+#	print("game won!!!", pos)
+	Globals.game_active=false
+	$CanvasLayer/MsgCont/MsgBox/YouWin.show()
 	camera_target=pos
+	show_msg()
 	
+
+func game_lost():
+	Globals.game_active=false	
+	$CanvasLayer/MsgCont/MsgBox/YouLose.show()	
+	show_msg()
+	pass
+
+func show_msg(): 
+	$CanvasLayer/MsgCont/MsgBox.show()
+	$CanvasLayer/MsgCont/msg.play("show")

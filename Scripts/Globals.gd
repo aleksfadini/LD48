@@ -2,11 +2,12 @@ extends Node
 
 
 const attraction_permanence=0.6
-const starting_flies=32
+const starting_flies=1
 const egg_flies_min=2
 const egg_flies_max=10
-const eggs_chance=0.01
-var game_won=false
+const eggs_chance=0.05
+#const min_abs_eggs_chance=0.05
+var game_active=true
 
 const sky_col=[
 	Color("#653D48"),
