@@ -7,7 +7,10 @@ const map_in_px=Vector2(window_size.x*20,window_size.y*20)
 const map_in_tiles=map_in_px/32
 const cosmetic_particle_size=512
 #const big_chunks_cap=1
-const big_chunks_cap=0
+const big_chunks_cap=-0.1
+const mid_chunks_cap=-0.05
+const contour_chunks_cap=0
+const outside_contour_chunks_cap=0.02
 const eggs_min_cap=0.4
 const eggs_max_cap=0.6
 # Camera Section
@@ -125,6 +128,9 @@ func generate_level():
 	noise.seed = randi()
 	noise.octaves = 12.0
 	noise.period = 12
+	make_outside_contour_chunks()
+	make_contour_chunks()
+	make_mid_chunks()
 	make_big_chunks()
 	lay_eggs()
 #	make_small_walls()
@@ -135,6 +141,30 @@ func make_big_chunks():
 			if a < big_chunks_cap:
 				$TileMap.set_cell(x,y,0)		
 	$TileMap.update_bitmask_region(Vector2(0.0, 0.0), Vector2(map_in_tiles.x, map_in_tiles.y))
+func make_contour_chunks():
+	for x in map_in_tiles.x:
+		for y in map_in_tiles.y:
+			var a = noise.get_noise_2d(x,y)
+			if a < contour_chunks_cap:
+				$TileMap.set_cell(x,y,1)		
+	$TileMap.update_bitmask_region(Vector2(0.0, 0.0), Vector2(map_in_tiles.x, map_in_tiles.y))
+func make_mid_chunks():
+	for x in map_in_tiles.x:
+		for y in map_in_tiles.y:
+			var a = noise.get_noise_2d(x,y)
+			if a < mid_chunks_cap:
+				$TileMap.set_cell(x,y,2)		
+	$TileMap.update_bitmask_region(Vector2(0.0, 0.0), Vector2(map_in_tiles.x, map_in_tiles.y))
+
+func make_outside_contour_chunks():
+	for x in map_in_tiles.x:
+		for y in map_in_tiles.y:
+			var a = noise.get_noise_2d(x,y)
+			if a < outside_contour_chunks_cap:
+				$TileMap.set_cell(x,y,3)		
+	$TileMap.update_bitmask_region(Vector2(0.0, 0.0), Vector2(map_in_tiles.x, map_in_tiles.y))
+
+
 func lay_eggs():
 	for x in map_in_tiles.x:
 		for y in map_in_tiles.y:
@@ -285,7 +315,7 @@ func resume_from_menu():
 	$CanvasLayer/MsgCont/msg.play_backwards("resume_inverse")
 
 func _on_updateLabels_timeout():
-	$CanvasLayer/Poop.text="P-energy: " +str(Playervars.poop)
+	$CanvasLayer/Poop.text="Poo: " +str(Playervars.poop)
 	if Playervars.poop>=Playervars.poop_to_level[0]:
 		Playervars.poop_to_level.remove(0)
 #		Playervars.poop=0
@@ -318,7 +348,8 @@ func game_won(pos):
 	
 
 func game_lost():
-	Globals.game_active=false	
+	Globals.game_active=false
+	$CanvasLayer/MsgCont/MsgBox/YouLose.init()
 	$CanvasLayer/MsgCont/MsgBox/YouLose.show()	
 	show_msg()
 	pass
@@ -370,7 +401,7 @@ func apply_power():
 	if power_to_be_applied=="more fruitful eggs":
 		Playervars.flies_in_one_egg+=10
 	if power_to_be_applied=="clairvoyance in the poo":
-		Playervars.zoom_out+=Vector2(0.35,0.35)
+		Playervars.zoom_out+=Vector2(0.5,0.5)
 	power_to_be_applied="nothing"	
 
 
