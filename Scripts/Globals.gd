@@ -7,8 +7,12 @@ const fly_max_age=20
 const egg_flies_min=2
 const egg_flies_max=8
 const eggs_chance=0.1#Was 0.05
+const poop_to_level=200
 #const min_abs_eggs_chance=0.05
 var game_active=true
+
+const powerUps=["ten flies","pheromones","longevity","more poo", "fruitful eggs","clairvoyance"]
+
 
 const sky_col=[
 	Color("#653D48"),

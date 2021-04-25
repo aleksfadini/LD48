@@ -36,6 +36,9 @@ var touch_ignore=false
 func _ready():
 	# reset vars
 	Playervars.reset_vars()
+	deactivate_all_menus()
+	# Connect Buttons
+	$CanvasLayer/Pause.get_child(1).connect("pressed",self,"launch_pause_menu")
 	# Set Up bg
 	generate_fancy_bg()
 #	print(": ", map_in_tiles)
@@ -263,10 +266,20 @@ func spawn_5_flies(pos):
 	spawn_single_fly(vect2)
 	spawn_single_fly(vect3)
 	spawn_single_fly(vect4)
-	
+# buttons functions
+func launch_pause_menu():
+	$CanvasLayer/MsgCont/MsgBox/PauseMenu.show()
+	show_msg()
+func resume_from_menu():
+	$CanvasLayer/MsgCont/msg.play_backwards("resume_inverse")
 
 func _on_updateLabels_timeout():
 	$CanvasLayer/Poop.text="P-energy: " +str(Playervars.poop)
+	if Playervars.poop>=Globals.poop_to_level:
+		Playervars.poop=0
+		$CanvasLayer/MsgCont/MsgBox/PowerUpMenu.show()
+		$CanvasLayer/MsgCont/MsgBox/PowerUpMenu.init()
+		show_msg()
 	var flies=$Flies.get_child_count()
 	$CanvasLayer/Flies.text="Flies: " +str(flies)
 	if flies == 0 and Globals.game_active:
@@ -298,5 +311,21 @@ func game_lost():
 	pass
 
 func show_msg(): 
+	if Globals.game_active:
+		get_tree().paused=true
 	$CanvasLayer/MsgCont/MsgBox.show()
 	$CanvasLayer/MsgCont/msg.play("show")
+
+# hide what needs to be hiddn
+func _on_msg_animation_finished(anim_name):
+	if anim_name=="resume_inverse":
+		get_tree().paused=false
+	pass # Replace with function body.
+
+func deactivate_all_menus():
+	$CanvasLayer/MsgCont/MsgBox.hide()
+	$CanvasLayer/MsgCont/MsgBox/YouLose.hide()
+	$CanvasLayer/MsgCont/MsgBox/YouWin.hide()
+	$CanvasLayer/MsgCont/MsgBox/PauseMenu.hide()
+	$CanvasLayer/MsgCont/MsgBox/PowerUpMenu.hide()
+	pass
