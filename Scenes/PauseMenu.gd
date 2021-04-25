@@ -20,7 +20,8 @@ func resume():
 	get_parent().get_parent().get_parent().get_parent().resume_from_menu()
 	
 func quit():
-	get_tree().change_scene("res://Scenes/Title.tscn")
+	get_tree().paused=false
+	get_tree().change_scene("res://Scenes/TitleScreen.tscn")
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
 #	pass

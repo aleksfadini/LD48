@@ -1,0 +1,219 @@
+[gd_scene load_steps=9 format=2]
+
+[ext_resource path="res://Themes/UITheme.tres" type="Theme" id=1]
+[ext_resource path="res://Scenes/TitleScreen.gd" type="Script" id=2]
+[ext_resource path="res://Prefabs/TitleText.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Prefabs/UI/PooMountainFx.tscn" type="PackedScene" id=4]
+[ext_resource path="res://Prefabs/UI/Btn.tscn" type="PackedScene" id=5]
+[ext_resource path="res://Prefabs/UI/BigBtn.tscn" type="PackedScene" id=6]
+[ext_resource path="res://Prefabs/FloatingThings.tscn" type="PackedScene" id=7]
+
+[sub_resource type="Animation" id=1]
+resource_name = "show"
+length = 2.0
+tracks/0/type = "value"
+tracks/0/path = NodePath("MegaTitle:rect_position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 1, 1.3 ),
+"transitions": PoolRealArray( 2, -0.5, 0.5 ),
+"update": 0,
+"values": [ Vector2( 256, 600 ), Vector2( 256, 0 ), Vector2( 256, -16 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("buttons:rect_position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 1, 1.6, 1.9 ),
+"transitions": PoolRealArray( 1, 2, -0.5, 0.5 ),
+"update": 0,
+"values": [ Vector2( 336, -600 ), Vector2( 336, -200 ), Vector2( 336, 224 ), Vector2( 336, 208 ) ]
+}
+
+[node name="TitleScreen" type="Node2D"]
+script = ExtResource( 2 )
+
+[node name="ParallaxBackground" type="ParallaxBackground" parent="."]
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Poo" type="Control" parent="CanvasLayer"]
+margin_left = 336.0
+margin_top = 160.0
+margin_right = 376.0
+margin_bottom = 200.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Bg" parent="CanvasLayer/Poo" instance=ExtResource( 4 )]
+
+[node name="MegaTitle" type="Control" parent="CanvasLayer"]
+margin_left = 256.0
+margin_top = -16.0
+margin_right = 296.0
+margin_bottom = 24.0
+rect_scale = Vector2( 0.6, 0.6 )
+theme = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="of" type="Control" parent="CanvasLayer/MegaTitle"]
+margin_left = -48.0
+margin_top = 112.0
+margin_right = -7.99999
+margin_bottom = 152.0
+rect_scale = Vector2( 0.8, 0.8 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Of" parent="CanvasLayer/MegaTitle/of" instance=ExtResource( 3 )]
+text = "of"
+
+[node name="th" type="Control" parent="CanvasLayer/MegaTitle"]
+margin_left = 106.667
+margin_top = 133.333
+margin_right = 146.667
+margin_bottom = 173.333
+rect_scale = Vector2( 0.9, 0.9 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="The" parent="CanvasLayer/MegaTitle/th" instance=ExtResource( 3 )]
+margin_left = 112.0
+margin_top = 16.0
+margin_right = 160.0
+margin_bottom = 71.0
+text = "the
+"
+
+[node name="lord" type="Control" parent="CanvasLayer/MegaTitle"]
+margin_right = 40.0
+margin_bottom = 40.0
+rect_scale = Vector2( 1.2, 1.2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Lord" parent="CanvasLayer/MegaTitle/lord" instance=ExtResource( 3 )]
+margin_left = -1.52588e-05
+
+[node name="flies" type="Control" parent="CanvasLayer/MegaTitle"]
+margin_left = -64.0
+margin_top = 176.0
+margin_right = -24.0
+margin_bottom = 216.0
+rect_scale = Vector2( 1.4, 1.4 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Flies" parent="CanvasLayer/MegaTitle/flies" instance=ExtResource( 3 )]
+margin_top = 96.0
+margin_right = 60.0
+margin_bottom = 122.0
+text = "Flies"
+
+[node name="buttons" type="Control" parent="CanvasLayer"]
+margin_left = 336.0
+margin_top = 217.468
+margin_right = 376.0
+margin_bottom = 257.468
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="intro" parent="CanvasLayer/buttons" instance=ExtResource( 6 )]
+margin_left = -3.05176e-05
+margin_top = -9.46803
+margin_right = -3.05176e-05
+margin_bottom = -9.46803
+label = "full introduction"
+
+[node name="start" parent="CanvasLayer/buttons" instance=ExtResource( 5 )]
+margin_left = -3.05176e-05
+margin_top = 70.532
+margin_right = -3.05176e-05
+margin_bottom = 70.532
+label = "start level"
+
+[node name="Intro" type="Control" parent="CanvasLayer"]
+margin_right = 40.0
+margin_bottom = 40.0
+theme = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Bg" type="Control" parent="CanvasLayer/Intro"]
+margin_right = 40.0
+margin_bottom = 40.0
+
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer/Intro/Bg"]
+self_modulate = Color( 0, 0, 0, 1 )
+margin_left = -300.0
+margin_top = -300.0
+margin_right = 340.0
+margin_bottom = 20.0
+rect_scale = Vector2( 3, 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Background" parent="CanvasLayer/Intro/Bg/ColorRect" instance=ExtResource( 7 )]
+position = Vector2( 286.667, 148 )
+scale = Vector2( 0.1, 0.1 )
+
+[node name="Background2" parent="CanvasLayer/Intro/Bg/ColorRect" instance=ExtResource( 7 )]
+position = Vector2( 153.333, 153.333 )
+scale = Vector2( 0.1, 0.1 )
+
+[node name="Background3" parent="CanvasLayer/Intro/Bg/ColorRect" instance=ExtResource( 7 )]
+position = Vector2( 137.333, 148 )
+scale = Vector2( 0.1, 0.1 )
+
+[node name="Background4" parent="CanvasLayer/Intro/Bg/ColorRect" instance=ExtResource( 7 )]
+position = Vector2( 233.333, 153.333 )
+scale = Vector2( 0.1, 0.1 )
+
+[node name="ScrollContainer" type="ScrollContainer" parent="CanvasLayer/Intro/Bg"]
+margin_left = 16.0
+margin_top = 16.0
+margin_right = 616.0
+margin_bottom = 296.0
+rect_min_size = Vector2( 600, 280 )
+theme = ExtResource( 1 )
+scroll_horizontal_enabled = false
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="CanvasLayer/Intro/Bg/ScrollContainer"]
+margin_right = 600.0
+margin_bottom = 4000.0
+rect_min_size = Vector2( 600, 4000 )
+text = "whole
+speech
+"
+autowrap = true
+clip_text = true
+
+[node name="Control3" type="Control" parent="CanvasLayer"]
+margin_right = 40.0
+margin_bottom = 40.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="intro" type="AnimationPlayer" parent="CanvasLayer"]
+autoplay = "show"
+anims/show = SubResource( 1 )

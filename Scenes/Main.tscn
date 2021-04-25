@@ -12,6 +12,7 @@
 [ext_resource path="res://Graphics/PooBarFill.png" type="Texture" id=10]
 [ext_resource path="res://Graphics/PooBarContour.png" type="Texture" id=11]
 [ext_resource path="res://Graphics/PooBarOver.png" type="Texture" id=12]
+[ext_resource path="res://Prefabs/UI/PooMountainFx.tscn" type="PackedScene" id=13]
 
 [sub_resource type="Animation" id=1]
 resource_name = "show"
@@ -28,10 +29,6 @@ tracks/0/keys = {
 "update": 0,
 "values": [ Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ) ]
 }
-
-[sub_resource type="Curve" id=2]
-max_value = 50.0
-_data = [ Vector2( 0, 0 ), 0.0, 0.0, 0, 0, Vector2( 0.199275, 25.6944 ), 0.0, 0.0, 0, 0, Vector2( 0.615942, 19.213 ), 0.0, 0.0, 0, 0, Vector2( 1, 0 ), 0.0, 0.0, 0, 0 ]
 
 [sub_resource type="Animation" id=3]
 tracks/0/type = "value"
@@ -491,78 +488,7 @@ visible = false
 position = Vector2( 320, 250 )
 scale = Vector2( 0.75, 0.75 )
 
-[node name="Bg" type="Node2D" parent="CanvasLayer/MsgCont/MsgBox"]
-
-[node name="Particles" type="Node2D" parent="CanvasLayer/MsgCont/MsgBox/Bg"]
-
-[node name="poop" type="CPUParticles2D" parent="CanvasLayer/MsgCont/MsgBox/Bg/Particles"]
-self_modulate = Color( 0.278431, 0.141176, 0, 1 )
-amount = 128
-lifetime = 6.0
-emission_shape = 2
-emission_rect_extents = Vector2( 250, 150 )
-gravity = Vector2( 0, 0 )
-scale_amount = 4.0
-scale_amount_curve = SubResource( 2 )
-
-[node name="poop2" type="CPUParticles2D" parent="CanvasLayer/MsgCont/MsgBox/Bg/Particles"]
-self_modulate = Color( 0.337255, 0.172549, 0.00392157, 1 )
-scale = Vector2( 0.8, 0.8 )
-amount = 128
-lifetime = 5.0
-emission_shape = 2
-emission_rect_extents = Vector2( 250, 150 )
-gravity = Vector2( 0, 0 )
-scale_amount = 4.0
-scale_amount_curve = SubResource( 2 )
-
-[node name="poop3" type="CPUParticles2D" parent="CanvasLayer/MsgCont/MsgBox/Bg/Particles"]
-self_modulate = Color( 0.376471, 0.192157, 0, 1 )
-scale = Vector2( 0.6, 0.6 )
-amount = 128
-lifetime = 4.0
-emission_shape = 2
-emission_rect_extents = Vector2( 250, 150 )
-gravity = Vector2( 0, 0 )
-scale_amount = 4.0
-scale_amount_curve = SubResource( 2 )
-
-[node name="poop4" type="CPUParticles2D" parent="CanvasLayer/MsgCont/MsgBox/Bg/Particles"]
-self_modulate = Color( 0.454902, 0.231373, 0, 1 )
-scale = Vector2( 0.45, 0.45 )
-amount = 128
-lifetime = 3.0
-emission_shape = 2
-emission_rect_extents = Vector2( 250, 150 )
-gravity = Vector2( 0, 0 )
-scale_amount = 4.0
-scale_amount_curve = SubResource( 2 )
-
-[node name="ColorRect" type="ColorRect" parent="CanvasLayer/MsgCont/MsgBox/Bg"]
-visible = false
-margin_left = -200.0
-margin_top = -100.0
-margin_right = 200.0
-margin_bottom = 100.0
-color = Color( 0.278431, 0.141176, 0, 1 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="flies" type="CPUParticles2D" parent="CanvasLayer/MsgCont/MsgBox/Bg"]
-self_modulate = Color( 0, 0, 0, 1 )
-amount = 64
-randomness = 1.0
-local_coords = false
-emission_shape = 2
-emission_rect_extents = Vector2( 300, 200 )
-spread = 180.0
-gravity = Vector2( 0, 0 )
-initial_velocity = 40.0
-initial_velocity_random = 0.8
-tangential_accel = 100.0
-tangential_accel_random = 1.0
-scale_amount = 4.0
+[node name="Bg" parent="CanvasLayer/MsgCont/MsgBox" instance=ExtResource( 13 )]
 
 [node name="YouWin" type="Node2D" parent="CanvasLayer/MsgCont/MsgBox"]
 visible = false

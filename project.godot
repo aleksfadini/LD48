@@ -16,7 +16,7 @@ _global_script_class_icons={
 [application]
 
 config/name="LD48"
-run/main_scene="res://Scenes/Main.tscn"
+run/main_scene="res://Scenes/TitleScreen.tscn"
 boot_splash/image="res://Graphics/PixelPortalzLogoBig.png"
 config/icon="res://icon.png"
 
@@ -53,5 +53,5 @@ quality/intended_usage/framebuffer_allocation.mobile=0
 quality/2d/use_pixel_snap=true
 vram_compression/import_etc=true
 vram_compression/import_etc2=false
-environment/default_clear_color=Color( 0.439216, 0.439216, 0.439216, 1 )
+environment/default_clear_color=Color( 0, 0, 0, 1 )
 environment/default_environment="res://default_env.tres"
