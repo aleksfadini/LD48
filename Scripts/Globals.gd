@@ -16,16 +16,21 @@ const poo_per_cell=1
 const laser_flies=false
 const laser_flies_percentage=0.5#based on 1
 const laser_flies_speed_boost=70#based on 1
+const fly_talk_time=5#based on 1
 #const min_abs_eggs_chance=0.05
 var game_active=true
 var another_menu_already=false
 const possiblePowers=["ten more flies","stronger pheromones","stronger flies","gather poo faster", "more fruitful eggs","clairvoyance in the poo", "laser-powered flies"]
 
+const col_poo_extra_dark=Color("#2d1700")
+const col_poo_extra_mid=Color("#5d3718")
+const col_poo_btn_contour=Color("#261c11")
+
 const poo_colors=[
-	Color(71,36,0,1),
-	Color(86,44,1,1),
-	Color(96,49,0,1),
-	Color(116,59,0,1)
+	Color("#472400"),
+	Color("#562c01"),
+	Color("#603100"),
+	Color("#743b00")
 	]
 
 const sky_col=[

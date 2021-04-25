@@ -1,0 +1,84 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://Themes/UITheme.tres" type="Theme" id=1]
+[ext_resource path="res://FlyMsg.gd" type="Script" id=2]
+[ext_resource path="res://Graphics/CalloutFill.png" type="Texture" id=3]
+[ext_resource path="res://Graphics/CalloutBorder.png" type="Texture" id=4]
+
+[sub_resource type="Animation" id=1]
+resource_name = "spawn_and_fly"
+length = 4.0
+tracks/0/type = "value"
+tracks/0/path = NodePath("center:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 3.9 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector2( 0, 0 ), Vector2( 0, 0 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("center:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.5, 0.8, 4 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0.576471 ), Color( 1, 1, 1, 0 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("center:scale")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0, 0.4, 0.5, 0.6, 2.6, 3.9 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1 ),
+"update": 0,
+"values": [ Vector2( 0, 0 ), Vector2( 1.25, 1.25 ), Vector2( 0.9, 0.9 ), Vector2( 1, 1 ), Vector2( 1, 1 ), Vector2( 0, 0 ) ]
+}
+
+[node name="FlyMsg" type="Node2D"]
+script = ExtResource( 2 )
+
+[node name="center" type="Node2D" parent="."]
+modulate = Color( 1, 1, 1, 0 )
+scale = Vector2( 1e-05, 1e-05 )
+
+[node name="Graphics" type="Node2D" parent="center"]
+scale = Vector2( 4.5, 4.5 )
+
+[node name="Fill" type="Sprite" parent="center/Graphics"]
+position = Vector2( 0, -4 )
+texture = ExtResource( 3 )
+
+[node name="Foreground" type="Sprite" parent="center/Graphics"]
+position = Vector2( 0, -4 )
+texture = ExtResource( 4 )
+
+[node name="Label" type="Label" parent="center"]
+margin_left = -126.0
+margin_top = -156.0
+margin_right = 124.0
+margin_bottom = -56.0
+theme = ExtResource( 1 )
+text = "Are you digging this? Get the joke? You are digging in poop...
+"
+align = 1
+valign = 1
+autowrap = true
+clip_text = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Anim" type="AnimationPlayer" parent="."]
+autoplay = "spawn_and_fly"
+anims/spawn_and_fly = SubResource( 1 )

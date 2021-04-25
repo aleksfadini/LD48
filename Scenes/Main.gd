@@ -31,6 +31,7 @@ var attractionPower=preload("res://Prefabs/attractionForce.tscn")
 var floatingBg=preload("res://Prefabs/FloatingThings.tscn")
 var flyInst=preload("res://Prefabs/Fly.tscn")
 var eggInst=preload("res://Prefabs/Egg.tscn")
+var flyMsg=preload("res://Prefabs/FlyMsg.tscn")
 # Script Vars (do not edit)
 var noise
 var dragging=false
@@ -42,6 +43,9 @@ var ten_more_flies=0
 func _ready():
 	Playervars.reset_vars()
 	update_poo_bar()
+	# color bottom of bar
+	$CanvasLayer/Poop/TextureProgress.tint_under=Globals.col_poo_extra_dark
+	$CanvasLayer/Poop/TextureProgress.tint_over=Globals.col_poo_btn_contour
 	deactivate_all_menus()
 	# reset vars
 	apply_power_after_pause=false
@@ -107,13 +111,13 @@ func update_poo_bar():
 	var cur_poo=Playervars.poop
 	var max_poo= $CanvasLayer/Poop/TextureProgress.max_value
 	$CanvasLayer/Poop/TextureProgress.value=cur_poo
-	if cur_poo >= max_poo*0.8:
+	if cur_poo >= max_poo*0.75:
 		$CanvasLayer/Poop/TextureProgress.tint_progress=Globals.poo_colors[3]
-	if cur_poo >= max_poo*0.6:
+	if cur_poo >= max_poo*0.5:
 		$CanvasLayer/Poop/TextureProgress.tint_progress=Globals.poo_colors[2]
-	if cur_poo >= max_poo*0.4:
+	if cur_poo >= max_poo*0.25:
 		$CanvasLayer/Poop/TextureProgress.tint_progress=Globals.poo_colors[1]
-	if cur_poo >= max_poo*0.2:
+	else:
 		$CanvasLayer/Poop/TextureProgress.tint_progress=Globals.poo_colors[0]	#add color
 func rescale_poo_bar(min_val):
 	$CanvasLayer/Poop/TextureProgress.min_value=min_val
@@ -154,21 +158,21 @@ func make_big_chunks():
 		for y in map_in_tiles.y:
 			var a = noise.get_noise_2d(x,y)
 			if a < big_chunks_cap:
-				$TileMap.set_cell(x,y,0)		
+				$TileMap.set_cell(x,y,0)
 	$TileMap.update_bitmask_region(Vector2(0.0, 0.0), Vector2(map_in_tiles.x, map_in_tiles.y))
 func make_contour_chunks():
 	for x in map_in_tiles.x:
 		for y in map_in_tiles.y:
 			var a = noise.get_noise_2d(x,y)
 			if a < contour_chunks_cap:
-				$TileMap.set_cell(x,y,1)		
+				$TileMap.set_cell(x,y,1)
 	$TileMap.update_bitmask_region(Vector2(0.0, 0.0), Vector2(map_in_tiles.x, map_in_tiles.y))
 func make_mid_chunks():
 	for x in map_in_tiles.x:
 		for y in map_in_tiles.y:
 			var a = noise.get_noise_2d(x,y)
 			if a < mid_chunks_cap:
-				$TileMap.set_cell(x,y,2)		
+				$TileMap.set_cell(x,y,2)
 	$TileMap.update_bitmask_region(Vector2(0.0, 0.0), Vector2(map_in_tiles.x, map_in_tiles.y))
 
 func make_outside_contour_chunks():
@@ -176,7 +180,7 @@ func make_outside_contour_chunks():
 		for y in map_in_tiles.y:
 			var a = noise.get_noise_2d(x,y)
 			if a < outside_contour_chunks_cap:
-				$TileMap.set_cell(x,y,3)		
+				$TileMap.set_cell(x,y,3)
 	$TileMap.update_bitmask_region(Vector2(0.0, 0.0), Vector2(map_in_tiles.x, map_in_tiles.y))
 
 
@@ -198,7 +202,7 @@ func lay_eggs():
 					var f = eggInst.instance()
 					$PickUps.add_child(f)
 #				f.init()
-					f.global_position=pos	
+					f.global_position=pos
 
 
 func generate_starting_point():
@@ -216,7 +220,7 @@ func generate_starting_point():
 	var tilesAroundStart=[-3,-2,-1,0,1,2,3]
 	for x in tilesAroundStart:
 		for y in tilesAroundStart:
-			if (not ((x==y and x>=3)) 
+			if (not ((x==y and x>=3))
 			and (not (x==y and x<=-3))
 			and (not (x==-y and y>=3))
 			and (not (x==-y and y<=-3))):
@@ -224,7 +228,7 @@ func generate_starting_point():
 				$TileMap.set_cellv(each_pos, -2000)
 	$Cam.global_position=starting_point
 	camera_target=starting_point
-	spawn_flies(Playervars.flies,starting_point)	
+	spawn_flies(Playervars.flies,starting_point)
 func spawn_flies(numb=10,start_point=Vector2()):
 	for i in numb:
 		var fly_scale =4 # to account for fly size
@@ -284,7 +288,8 @@ func _input(event):
 	if event.is_action_released("ui_accept"):
 #		game_won(Vector2(0,0))
 #		game_lost()
-		fly_talks()
+#		fly_talk()
+		_on_flyTalkTimer_timeout()
 #		get_tree().reload_current_scene()
 func _on_touchIgnore_timeout():
 	touch_ignore=false
@@ -321,23 +326,23 @@ func spawn_5_flies(pos):
 	spawn_single_fly(vect3)
 	spawn_single_fly(vect4)
 
-func fly_talks():
-	# instead of position, it should be a fly position at some point
-	var posit=get_global_mouse_position()
-	var start_point = posit
-	var mid_point = Vector2(20,50)
-	var end_point = Vector2(-200,-50)
-	var small_r = Vector2(rand_range(-5,5),rand_range(-5,5))
-	var mid_r = Vector2(rand_range(-20,20),rand_range(-20,20))
-	var big_r = Vector2(rand_range(-50,50),rand_range(-50,50))
-	var r_start_point = start_point+mid_r
-	var r_mid_point = mid_point+small_r+big_r
-	var r_end_point = end_point+big_r
-	# Second, substitute them in the animation
-	var position_anim_track = $PUAnim.get_animation("grow_and_disappear")
-	position_anim_track.track_set_key_value(2,0,r_start_point)
-	position_anim_track.track_set_key_value(2,1,r_mid_point)
-	position_anim_track.track_set_key_value(2,2,r_end_point)
+#func fly_talks():
+#	# instead of position, it should be a fly position at some point
+#	var posit=get_global_mouse_position()
+#	var start_point = posit
+#	var mid_point = Vector2(20,50)
+#	var end_point = Vector2(-200,-50)
+#	var small_r = Vector2(rand_range(-5,5),rand_range(-5,5))
+#	var mid_r = Vector2(rand_range(-20,20),rand_range(-20,20))
+#	var big_r = Vector2(rand_range(-50,50),rand_range(-50,50))
+#	var r_start_point = start_point+mid_r
+#	var r_mid_point = mid_point+small_r+big_r
+#	var r_end_point = end_point+big_r
+#	# Second, substitute them in the animation
+#	var position_anim_track = $PUAnim.get_animation("grow_and_disappear")
+#	position_anim_track.track_set_key_value(2,0,r_start_point)
+#	position_anim_track.track_set_key_value(2,1,r_mid_point)
+#	position_anim_track.track_set_key_value(2,2,r_end_point)
 	
 # buttons functions
 func launch_pause_menu():
@@ -350,7 +355,7 @@ func resume_from_menu():
 	$CanvasLayer/MsgCont/msg.play_backwards("resume_inverse")
 
 func _on_updateLabels_timeout():
-	update_poo_bar()	
+	update_poo_bar()
 	$CanvasLayer/Poop/Label.text="Poo: " +str(Playervars.poop)
 	if Playervars.poop>=Playervars.poop_to_level[0]:
 		var min_val=Playervars.poop_to_level[0]
@@ -371,11 +376,11 @@ func _on_updateLabels_timeout():
 
 func _on_WinTrigger_body_entered(body):
 	if Globals.game_active and body.is_in_group("flies") and body.is_visible() and $Triggers/WinTrigger.is_visible():
-			var notif=VisibilityNotifier2D.new()
-			body.add_child(notif)
-			notif.connect("screen_entered",self,"game_won",[body.global_position])
+		var notif=VisibilityNotifier2D.new()
+		body.add_child(notif)
+		notif.connect("screen_entered",self,"game_won",[body.global_position])
 #			if notif.is_on_screen():
-			pass
+		pass
 	pass # Replace with function body.
 func game_won(pos):
 #	print("game won!!!", pos)
@@ -388,11 +393,11 @@ func game_won(pos):
 func game_lost():
 	Globals.game_active=false
 	$CanvasLayer/MsgCont/MsgBox/YouLose.init()
-	$CanvasLayer/MsgCont/MsgBox/YouLose.show()	
+	$CanvasLayer/MsgCont/MsgBox/YouLose.show()
 	show_msg()
 	pass
 
-func show_msg(): 
+func show_msg():
 	Globals.another_menu_already=true
 	if Globals.game_active:
 		get_tree().paused=true
@@ -443,9 +448,15 @@ func apply_power():
 	if power_to_be_applied=="laser-powered flies":
 		Playervars.laser_flies=true
 		Playervars.possiblePowers.erase("laser-powered flies")
-	power_to_be_applied="nothing"	
+	power_to_be_applied="nothing"
 
-
+func fly_talk(pos):
+#	var starting_point=Vector2(window_size.x*10-100,window_size.y*20-290)
+	
+#	var pos = Vector2(300,300)
+	var f = flyMsg.instance()
+	f.global_position=pos
+	$ExtraMessages.add_child(f)
 
 func _on_TenMoreFlies_timeout():
 	if ten_more_flies<=10:
@@ -453,3 +464,25 @@ func _on_TenMoreFlies_timeout():
 		ten_more_flies+=1
 		$TenMoreFlies.start()
 	pass # Replace with function body.
+
+
+
+func _on_anim_animation_finished(anim_name):
+	if anim_name == "show":
+		$CanvasLayer/hint.queue_free()
+	pass # Replace with function body.
+
+
+func _on_flyTalkTimer_timeout():
+	if Globals.game_active:
+	# get a random fly
+		var random_id = randi() % $Flies.get_child_count()
+		var talker= $Flies.get_child(random_id)
+		# make her talks
+		fly_talk(talker.global_position)
+		$flyTalkTimer.start()
+		$flyTalkTimer.wait_time=Globals.fly_talk_time+randi()%3
+	else:
+		pass
+		
+pass # Replace with function body.

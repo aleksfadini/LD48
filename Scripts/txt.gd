@@ -13,6 +13,8 @@ const flySentences=[
 	"It's like an aromatic sauna in here.",
 	"I love my neighborhood.",
 	"It's a poop party!",
+	"Eggs abound in the depth, but lack close to the surface.",
+	"Imagine that it's chocolate fudge...",
 	"I love random directions.",
 	"Time FLIES by.",
 	"I'm pretty fly for a ...",
@@ -31,6 +33,7 @@ const flySentences=[
 	"Sometimes you have to go down to go up.",
 	"Deeper and deeper!",
 	"Brown is my favorite color.",
+	"Gotta catch those eggs!",
 	"The God of Defecation never clarifies what his rewards are",
 #	"It's so cool to be laser-powered...",
 	"Lead us up, but gather power down in the depths.",
@@ -42,6 +45,8 @@ const powerUpSentences=[
 	"Lead us up!",
 	"I'm getting old!"
 	]
+
+const introInstructions="I cannot tell you how to do it. The FLIES will tell you."
 func _ready():
 	pass # Replace with function body.
 
