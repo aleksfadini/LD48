@@ -20,7 +20,9 @@ func resume():
 func init():
 	pick_rand_powers()
 	$power1.label=power1
-	$power1.label=power2
+	$power2.label=power2
+	$power1.init()
+	$power2.init()
 	
 func pick_rand_powers():
 	var powerUps=Globals.powerUps.duplicate()
@@ -30,7 +32,9 @@ func pick_rand_powers():
 	power2=powerUps[randi()%powerUps.size()]
 	
 func power1():
-	get_parent().get_parent().get_parent().get_parent().applypower(power1)
+	get_parent().get_parent().get_parent().get_parent().flag_power_to_be_applied(power1)
+	get_parent().get_parent().get_parent().get_parent().resume_from_menu()
 	
 func power2():
-	get_parent().get_parent().get_parent().get_parent().applypower(power2)
+	get_parent().get_parent().get_parent().get_parent().flag_power_to_be_applied(power2)
+	get_parent().get_parent().get_parent().get_parent().resume_from_menu()

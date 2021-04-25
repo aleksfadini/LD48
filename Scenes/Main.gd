@@ -20,7 +20,7 @@ var zoom_in_speed=0.01
 var zoom_out_speed=0.01
 var zoom_in=Vector2(1,1)
 #var zoom_in=Vector2(4,4)
-var zoom_out=Vector2(1.5,1.5)
+#var zoom_out=Vector2(1.5,1.5)
 #var zoom_out=Vector2(4,4)
 #var zoom_out=Vector2(8,8)
 # Scenes Preload
@@ -32,11 +32,16 @@ var eggInst=preload("res://Prefabs/Egg.tscn")
 var noise
 var dragging=false
 var touch_ignore=false
+var apply_power_after_pause=false
+var power_to_be_applied=""
+var ten_more_flies=0
 #var curr_bg_color=
 func _ready():
-	# reset vars
-	Playervars.reset_vars()
 	deactivate_all_menus()
+	# reset vars
+	apply_power_after_pause=false
+	Playervars.reset_vars()
+#	zoom_out=Playervars.zoom_out
 	# Connect Buttons
 	$CanvasLayer/Pause.get_child(1).connect("pressed",self,"launch_pause_menu")
 	# Set Up bg
@@ -80,13 +85,16 @@ func zoom_in_camera():
 		$Cam.zoom=lerp($Cam.zoom,zoom_in,zoom_in_speed)
 func zoom_out_camera():
 	if not Globals.game_active:
-		zoom_out=Vector2(20,20)
-	if $Cam.zoom.x < (zoom_out.x):
-		$Cam.zoom=lerp($Cam.zoom,zoom_out,zoom_out_speed)
+		var zoom_out=Vector2(20,20)
+		if $Cam.zoom.x < (Playervars.zoom_out.x):
+			$Cam.zoom=lerp($Cam.zoom,zoom_out,zoom_out_speed)
+	if $Cam.zoom.x < (Playervars.zoom_out.x):
+		$Cam.zoom=lerp($Cam.zoom,Playervars.zoom_out,zoom_out_speed)
 func control_cam_and_attract():
 	camera_target = get_global_mouse_position()
 	if not touch_ignore:
 		var s = attractionPower.instance()
+		s.radius=Playervars.attraction_radius
 		add_child(s)
 		s.global_position=get_global_mouse_position()
 		touch_ignore=true
@@ -243,15 +251,15 @@ func eatCell(tile_pos):
 	var tile_id = $TileMap.get_cellv(tile_pos)
 	if tile_id == 3:
 #		velocity=velocity.bounce(collision.normal)
-		Playervars.poop+=1
+		Playervars.poop+=Playervars.poo_per_cell
 		$TileMap.set_cellv(tile_pos, -999999999)#this is CRAZYYYY
 	elif 0 <= tile_id and tile_id < 3:
 #				yield($eatCell, "timeout")
 		$TileMap.set_cellv(tile_pos, tile_id+1)
 func spawn_flies_from_egg(egg_position):
 #	spawn_5_flies(egg_position)
-
-	var number_of_flies=rand_range(Globals.egg_flies_min,Globals.egg_flies_max)
+#	var number_of_flies=rand_range(Globals.egg_flies_min,Globals.egg_flies_max)
+	var number_of_flies=Playervars.flies_in_one_egg
 	spawn_flies(number_of_flies,egg_position)
 #despreate attempt to optimize
 func spawn_5_flies(pos):
@@ -268,15 +276,20 @@ func spawn_5_flies(pos):
 	spawn_single_fly(vect4)
 # buttons functions
 func launch_pause_menu():
-	$CanvasLayer/MsgCont/MsgBox/PauseMenu.show()
-	show_msg()
+	if not Globals.another_menu_already:
+		$CanvasLayer/MsgCont/MsgBox/PauseMenu.show()
+		show_msg()
+	else:
+		pass
 func resume_from_menu():
 	$CanvasLayer/MsgCont/msg.play_backwards("resume_inverse")
 
 func _on_updateLabels_timeout():
 	$CanvasLayer/Poop.text="P-energy: " +str(Playervars.poop)
-	if Playervars.poop>=Globals.poop_to_level:
-		Playervars.poop=0
+	if Playervars.poop>=Playervars.poop_to_level[0]:
+		Playervars.poop_to_level.remove(0)
+#		Playervars.poop=0
+#		deactivate_all_menus()
 		$CanvasLayer/MsgCont/MsgBox/PowerUpMenu.show()
 		$CanvasLayer/MsgCont/MsgBox/PowerUpMenu.init()
 		show_msg()
@@ -311,21 +324,60 @@ func game_lost():
 	pass
 
 func show_msg(): 
+	Globals.another_menu_already=true
 	if Globals.game_active:
 		get_tree().paused=true
-	$CanvasLayer/MsgCont/MsgBox.show()
 	$CanvasLayer/MsgCont/msg.play("show")
+	$CanvasLayer/MsgCont/MsgBox.show()
 
 # hide what needs to be hiddn
 func _on_msg_animation_finished(anim_name):
 	if anim_name=="resume_inverse":
 		get_tree().paused=false
+		Globals.another_menu_already=false
+		deactivate_all_menus()
+		if apply_power_after_pause:
+			apply_power()
+		
 	pass # Replace with function body.
 
 func deactivate_all_menus():
+	$CanvasLayer/MsgCont/MsgBox.position.y=600
 	$CanvasLayer/MsgCont/MsgBox.hide()
 	$CanvasLayer/MsgCont/MsgBox/YouLose.hide()
 	$CanvasLayer/MsgCont/MsgBox/YouWin.hide()
 	$CanvasLayer/MsgCont/MsgBox/PauseMenu.hide()
 	$CanvasLayer/MsgCont/MsgBox/PowerUpMenu.hide()
 	pass
+
+###############################
+##### POWERUPS
+func flag_power_to_be_applied(power):
+	power_to_be_applied=power
+	apply_power_after_pause=true
+
+func apply_power():
+	apply_power_after_pause=true
+	if power_to_be_applied=="ten more flies":
+		ten_more_flies=0
+		$TenMoreFlies.start()
+	if power_to_be_applied=="stronger pheromones":
+		Playervars.attraction_radius+=0.5
+	if power_to_be_applied=="stronger flies":
+		Playervars.fly_max_age+=5
+	if power_to_be_applied=="gather more poo":
+		Playervars.poo_per_cell+=1
+	if power_to_be_applied=="more fruitful eggs":
+		Playervars.flies_in_one_egg+=10
+	if power_to_be_applied=="clairvoyance in the poo":
+		Playervars.zoom_out+=Vector2(0.35,0.35)
+	power_to_be_applied="nothing"	
+
+
+
+func _on_TenMoreFlies_timeout():
+	if ten_more_flies<=10:
+		spawn_single_fly(get_global_mouse_position())
+		ten_more_flies+=1
+		$TenMoreFlies.start()
+	pass # Replace with function body.

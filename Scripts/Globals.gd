@@ -4,14 +4,19 @@ extends Node
 const attraction_permanence=0.6
 const starting_flies=1
 const fly_max_age=20
-const egg_flies_min=2
-const egg_flies_max=8
+const flies_in_one_egg=5
+#const egg_flies_min=2
+#const egg_flies_max=8
 const eggs_chance=0.1#Was 0.05
-const poop_to_level=200
+#const poop_to_level=1
+const attraction_radius=1.5
+const poop_to_level=[100,200,400,800,1200,1700,2500,3000,4000,6000,8000,12000]
+const zoom_out=Vector2(1.5,1.5)
+const poo_per_cell=1
 #const min_abs_eggs_chance=0.05
 var game_active=true
-
-const powerUps=["ten flies","pheromones","longevity","more poo", "fruitful eggs","clairvoyance"]
+var another_menu_already=false
+const powerUps=["ten more flies","stronger pheromones","stronger flies","gather more poo", "more fruitful eggs","clairvoyance in the poo"]
 
 
 const sky_col=[
