@@ -2,7 +2,7 @@ extends Node
 
 
 const attraction_permanence=0.6
-const starting_flies=1
+const starting_flies=5
 const fly_max_age=20
 const flies_in_one_egg=5
 #const egg_flies_min=2
@@ -10,7 +10,7 @@ const flies_in_one_egg=5
 const eggs_chance=0.1#Was 0.05
 #const poop_to_level=1
 const attraction_radius=1.5
-const poop_to_level=[100,200,400,800,1200,1700,2500,3000,4000,6000,8000,12000]
+const poop_to_level=[100,200,400,800,1200,1700,2300,3000,3700,4500,5500,6700,7800,9000,11000,13000,20000,50000]
 const zoom_out=Vector2(1.5,1.5)
 const poo_per_cell=1
 const laser_flies=false

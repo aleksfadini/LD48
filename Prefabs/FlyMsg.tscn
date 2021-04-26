@@ -81,4 +81,5 @@ __meta__ = {
 
 [node name="Anim" type="AnimationPlayer" parent="."]
 autoplay = "spawn_and_fly"
+playback_speed = 0.75
 anims/spawn_and_fly = SubResource( 1 )

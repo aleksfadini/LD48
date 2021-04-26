@@ -41,6 +41,8 @@ var power_to_be_applied=""
 var ten_more_flies=0
 #var curr_bg_color=
 func _ready():
+	$Music.pitch_scale=0.95+randf()*0.2
+	$Music.play()
 	Playervars.reset_vars()
 	update_poo_bar()
 	# color bottom of bar
@@ -279,6 +281,8 @@ func spawn_single_fly(pos):
 	var f = flyInst.instance()
 	f.global_position=pos
 	$Flies.add_child(f)
+	$egghatch.pitch_scale=randf()*0.4+0.9
+	$egghatch.play()
 #	f.init()
 func _input(event):
 	if event.is_action_pressed("ui_click"):
@@ -383,6 +387,8 @@ func _on_WinTrigger_body_entered(body):
 		pass
 	pass # Replace with function body.
 func game_won(pos):
+	$won.pitch_scale=randf()*0.2+1
+	$won.play()
 #	print("game won!!!", pos)
 	Globals.game_active=false
 	$CanvasLayer/MsgCont/MsgBox/YouWin.show()
@@ -391,6 +397,8 @@ func game_won(pos):
 	
 
 func game_lost():
+	$lost.pitch_scale=randf()*0.2+1
+	$lost.play()
 	Globals.game_active=false
 	$CanvasLayer/MsgCont/MsgBox/YouLose.init()
 	$CanvasLayer/MsgCont/MsgBox/YouLose.show()
@@ -398,6 +406,8 @@ func game_lost():
 	pass
 
 func show_msg():
+	$callout.pitch_scale=randf()*1+0.5
+	$callout.play()
 	Globals.another_menu_already=true
 	if Globals.game_active:
 		get_tree().paused=true
@@ -431,6 +441,8 @@ func flag_power_to_be_applied(power):
 	apply_power_after_pause=true
 
 func apply_power():
+	$powerUp.pitch_scale=randf()*0.2+0.9
+	$powerUp.play()
 	apply_power_after_pause=true
 	if power_to_be_applied=="ten more flies":
 		ten_more_flies=0
@@ -444,7 +456,7 @@ func apply_power():
 	if power_to_be_applied=="more fruitful eggs":
 		Playervars.flies_in_one_egg+=10
 	if power_to_be_applied=="clairvoyance in the poo":
-		Playervars.zoom_out+=Vector2(0.5,0.5)
+		Playervars.zoom_out+=Vector2(0.6,0.6)
 	if power_to_be_applied=="laser-powered flies":
 		Playervars.laser_flies=true
 		Playervars.possiblePowers.erase("laser-powered flies")
@@ -482,6 +494,8 @@ func _on_flyTalkTimer_timeout():
 		fly_talk(talker.global_position)
 		$flyTalkTimer.start()
 		$flyTalkTimer.wait_time=Globals.fly_talk_time+randi()%3
+		$callout.pitch_scale=randf()*1+4
+		$callout.play()
 	else:
 		pass
 		

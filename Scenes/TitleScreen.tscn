@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://Themes/UITheme.tres" type="Theme" id=1]
 [ext_resource path="res://Scenes/TitleScreen.gd" type="Script" id=2]
@@ -7,6 +7,9 @@
 [ext_resource path="res://Prefabs/UI/Btn.tscn" type="PackedScene" id=5]
 [ext_resource path="res://Prefabs/UI/BigBtn.tscn" type="PackedScene" id=6]
 [ext_resource path="res://Prefabs/FloatingThings.tscn" type="PackedScene" id=7]
+[ext_resource path="res://Audio/Opening.ogg" type="AudioStream" id=8]
+[ext_resource path="res://Audio/LordOfTheFlies.ogg" type="AudioStream" id=9]
+[ext_resource path="res://Audio/Speech.ogg" type="AudioStream" id=10]
 
 [sub_resource type="Animation" id=1]
 resource_name = "fade_in"
@@ -101,9 +104,9 @@ __meta__ = {
 
 [node name="MegaTitle" type="Control" parent="CanvasLayer"]
 margin_left = 256.0
-margin_top = -16.0
+margin_top = 600.0
 margin_right = 296.0
-margin_bottom = 24.0
+margin_bottom = 640.0
 rect_scale = Vector2( 0.6, 0.6 )
 theme = ExtResource( 1 )
 __meta__ = {
@@ -170,9 +173,9 @@ text = "Flies"
 
 [node name="buttons" type="Control" parent="CanvasLayer"]
 margin_left = 336.0
-margin_top = 217.468
+margin_top = -600.0
 margin_right = 376.0
-margin_bottom = 257.468
+margin_bottom = -560.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -191,8 +194,18 @@ margin_right = -3.05176e-05
 margin_bottom = 70.532
 label = "start level"
 
+[node name="Label" type="Label" parent="CanvasLayer/buttons"]
+self_modulate = Color( 1, 1, 1, 0.501961 )
+margin_left = -303.892
+margin_top = 83.6542
+margin_right = 488.108
+margin_bottom = 109.654
+theme = ExtResource( 1 )
+text = "aleks fadini                        Ludum Dare 48"
+
 [node name="Intro" type="Control" parent="CanvasLayer"]
 visible = false
+modulate = Color( 1, 1, 1, 0 )
 margin_right = 40.0
 margin_bottom = 40.0
 theme = ExtResource( 1 )
@@ -351,4 +364,23 @@ __meta__ = {
 [node name="open" type="AnimationPlayer" parent="CanvasLayer"]
 autoplay = "show"
 anims/show = SubResource( 4 )
+
+[node name="Lord" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 9 )
+volume_db = -8.0
+pitch_scale = 1.2
+
+[node name="Speech" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 10 )
+volume_db = 2.0
+
+[node name="scrollTimer" type="Timer" parent="Speech"]
+wait_time = 0.04
+
+[node name="musicBg" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 8 )
+volume_db = -1.0
+autoplay = true
 [connection signal="animation_finished" from="CanvasLayer/Intro/intro" to="." method="_on_intro_animation_finished"]
+[connection signal="animation_finished" from="CanvasLayer/open" to="." method="_on_open_animation_finished"]
+[connection signal="timeout" from="Speech/scrollTimer" to="." method="_on_scrollTimer_timeout"]

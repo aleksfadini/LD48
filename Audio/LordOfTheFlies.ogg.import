@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/LordOfTheFlies.ogg-4271b77da11a0b2cde88e4a4d7cfd1b2.oggstr"
+
+[deps]
+
+source_file="res://Audio/LordOfTheFlies.ogg"
+dest_files=[ "res://.import/LordOfTheFlies.ogg-4271b77da11a0b2cde88e4a4d7cfd1b2.oggstr" ]
+
+[params]
+
+loop=false
+loop_offset=0

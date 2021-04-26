@@ -1,10 +1,11 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://Themes/UITheme.tres" type="Theme" id=1]
 [ext_resource path="res://Graphics/BtnPressed.png" type="Texture" id=2]
 [ext_resource path="res://Graphics/BtnUnpressed.png" type="Texture" id=3]
 [ext_resource path="res://Graphics/BtnFill.png" type="Texture" id=4]
 [ext_resource path="res://Prefabs/UI/BigBtn.gd" type="Script" id=5]
+[ext_resource path="res://Audio/fart.ogg" type="AudioStream" id=6]
 
 [sub_resource type="Animation" id=1]
 resource_name = "pressed"
@@ -76,4 +77,8 @@ autowrap = true
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 anims/pressed = SubResource( 1 )
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 6 )
+pitch_scale = 2.0
 [connection signal="button_down" from="Button" to="." method="_on_Button_button_down"]

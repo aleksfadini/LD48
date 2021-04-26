@@ -1,9 +1,9 @@
-[gd_scene load_steps=39 format=2]
+[gd_scene load_steps=44 format=2]
 
 [ext_resource path="res://Graphics/Tiles.png" type="Texture" id=1]
 [ext_resource path="res://Scenes/Main.gd" type="Script" id=2]
 [ext_resource path="res://Themes/UITheme.tres" type="Theme" id=3]
-[ext_resource path="res://Audio/Temp.ogg" type="AudioStream" id=4]
+[ext_resource path="res://Audio/LevelMusic.ogg" type="AudioStream" id=4]
 [ext_resource path="res://Prefabs/UI/Btn.tscn" type="PackedScene" id=5]
 [ext_resource path="res://Scenes/PauseMenu.gd" type="Script" id=6]
 [ext_resource path="res://Scenes/PowerUpMenu.gd" type="Script" id=7]
@@ -13,6 +13,11 @@
 [ext_resource path="res://Graphics/PooBarContour.png" type="Texture" id=11]
 [ext_resource path="res://Graphics/PooBarOver.png" type="Texture" id=12]
 [ext_resource path="res://Prefabs/UI/PooMountainFx.tscn" type="PackedScene" id=13]
+[ext_resource path="res://Audio/fart.ogg" type="AudioStream" id=14]
+[ext_resource path="res://Audio/eggHatch.ogg" type="AudioStream" id=15]
+[ext_resource path="res://Audio/powerUp.ogg" type="AudioStream" id=16]
+[ext_resource path="res://Audio/Won.ogg" type="AudioStream" id=17]
+[ext_resource path="res://Audio/haha.ogg" type="AudioStream" id=18]
 
 [sub_resource type="Animation" id=1]
 resource_name = "show"
@@ -28,6 +33,32 @@ tracks/0/keys = {
 "transitions": PoolRealArray( -2, 2, 1 ),
 "update": 0,
 "values": [ Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ) ]
+}
+
+[sub_resource type="Animation" id=2]
+tracks/0/type = "value"
+tracks/0/path = NodePath("MsgBox:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.7, 0.9 ),
+"transitions": PoolRealArray( -2, 0.5, 1 ),
+"update": 0,
+"values": [ Vector2( 320, 600 ), Vector2( 320, 160 ), Vector2( 320, 250 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("MsgBox:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.7, 0.9 ),
+"transitions": PoolRealArray( -2, 0.5, 1 ),
+"update": 0,
+"values": [ Vector2( 0.1, 0.1 ), Vector2( 1, 1 ), Vector2( 0.75, 0.75 ) ]
 }
 
 [sub_resource type="Animation" id=3]
@@ -56,34 +87,11 @@ tracks/1/keys = {
 "values": [ Vector2( 0.1, 0.1 ), Vector2( 1, 1 ), Vector2( 0.75, 0.75 ) ]
 }
 
-[sub_resource type="Animation" id=4]
-tracks/0/type = "value"
-tracks/0/path = NodePath("MsgBox:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0, 0.7, 0.9 ),
-"transitions": PoolRealArray( -2, 0.5, 1 ),
-"update": 0,
-"values": [ Vector2( 320, 600 ), Vector2( 320, 160 ), Vector2( 320, 250 ) ]
-}
-tracks/1/type = "value"
-tracks/1/path = NodePath("MsgBox:scale")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/keys = {
-"times": PoolRealArray( 0, 0.7, 0.9 ),
-"transitions": PoolRealArray( -2, 0.5, 1 ),
-"update": 0,
-"values": [ Vector2( 0.1, 0.1 ), Vector2( 1, 1 ), Vector2( 0.75, 0.75 ) ]
-}
-
-[sub_resource type="RectangleShape2D" id=5]
+[sub_resource type="RectangleShape2D" id=4]
 extents = Vector2( 30000, 4000 )
+
+[sub_resource type="ConvexPolygonShape2D" id=5]
+points = PoolVector2Array( 0, 0, 32, 0, 32, 32, 0, 32 )
 
 [sub_resource type="ConvexPolygonShape2D" id=6]
 points = PoolVector2Array( 0, 0, 32, 0, 32, 32, 0, 32 )
@@ -142,10 +150,7 @@ points = PoolVector2Array( 0, 0, 32, 0, 32, 32, 0, 32 )
 [sub_resource type="ConvexPolygonShape2D" id=24]
 points = PoolVector2Array( 0, 0, 32, 0, 32, 32, 0, 32 )
 
-[sub_resource type="ConvexPolygonShape2D" id=25]
-points = PoolVector2Array( 0, 0, 32, 0, 32, 32, 0, 32 )
-
-[sub_resource type="TileSet" id=26]
+[sub_resource type="TileSet" id=25]
 0/name = "Tiles.png 0"
 0/texture = ExtResource( 1 )
 0/tex_offset = Vector2( 0, 0 )
@@ -165,38 +170,38 @@ points = PoolVector2Array( 0, 0, 32, 0, 32, 32, 0, 32 )
 0/navigation_offset = Vector2( 0, 0 )
 0/shape_offset = Vector2( 0, 0 )
 0/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
-0/shape = SubResource( 6 )
+0/shape = SubResource( 5 )
 0/shape_one_way = false
 0/shape_one_way_margin = 1.0
 0/shapes = [ {
 "autotile_coord": Vector2( 1, 0 ),
 "one_way": false,
 "one_way_margin": 1.0,
-"shape": SubResource( 6 ),
+"shape": SubResource( 5 ),
 "shape_transform": Transform2D( 1, 0, 0, 1, 0, 0 )
 }, {
 "autotile_coord": Vector2( 1, 0 ),
 "one_way": false,
 "one_way_margin": 1.0,
-"shape": SubResource( 7 ),
+"shape": SubResource( 6 ),
 "shape_transform": Transform2D( 1, 0, 0, 1, 0, 0 )
 }, {
 "autotile_coord": Vector2( 0, 0 ),
 "one_way": false,
 "one_way_margin": 1.0,
-"shape": SubResource( 8 ),
+"shape": SubResource( 7 ),
 "shape_transform": Transform2D( 1, 0, 0, 1, 0, 0 )
 }, {
 "autotile_coord": Vector2( 2, 0 ),
 "one_way": false,
 "one_way_margin": 1.0,
-"shape": SubResource( 9 ),
+"shape": SubResource( 8 ),
 "shape_transform": Transform2D( 1, 0, 0, 1, 0, 0 )
 }, {
 "autotile_coord": Vector2( 3, 0 ),
 "one_way": false,
 "one_way_margin": 1.0,
-"shape": SubResource( 10 ),
+"shape": SubResource( 9 ),
 "shape_transform": Transform2D( 1, 0, 0, 1, 0, 0 )
 } ]
 0/z_index = 0
@@ -219,32 +224,32 @@ points = PoolVector2Array( 0, 0, 32, 0, 32, 32, 0, 32 )
 1/navigation_offset = Vector2( 0, 0 )
 1/shape_offset = Vector2( 0, 0 )
 1/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
-1/shape = SubResource( 11 )
+1/shape = SubResource( 10 )
 1/shape_one_way = false
 1/shape_one_way_margin = 1.0
 1/shapes = [ {
 "autotile_coord": Vector2( 0, 0 ),
 "one_way": false,
 "one_way_margin": 1.0,
-"shape": SubResource( 11 ),
+"shape": SubResource( 10 ),
 "shape_transform": Transform2D( 1, 0, 0, 1, 0, 0 )
 }, {
 "autotile_coord": Vector2( 1, 0 ),
 "one_way": false,
 "one_way_margin": 1.0,
-"shape": SubResource( 12 ),
+"shape": SubResource( 11 ),
 "shape_transform": Transform2D( 1, 0, 0, 1, 0, 0 )
 }, {
 "autotile_coord": Vector2( 2, 0 ),
 "one_way": false,
 "one_way_margin": 1.0,
-"shape": SubResource( 13 ),
+"shape": SubResource( 12 ),
 "shape_transform": Transform2D( 1, 0, 0, 1, 0, 0 )
 }, {
 "autotile_coord": Vector2( 3, 0 ),
 "one_way": false,
 "one_way_margin": 1.0,
-"shape": SubResource( 14 ),
+"shape": SubResource( 13 ),
 "shape_transform": Transform2D( 1, 0, 0, 1, 0, 0 )
 } ]
 1/z_index = 0
@@ -267,10 +272,16 @@ points = PoolVector2Array( 0, 0, 32, 0, 32, 32, 0, 32 )
 2/navigation_offset = Vector2( 0, 0 )
 2/shape_offset = Vector2( 0, 0 )
 2/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
-2/shape = SubResource( 15 )
+2/shape = SubResource( 14 )
 2/shape_one_way = false
 2/shape_one_way_margin = 1.0
 2/shapes = [ {
+"autotile_coord": Vector2( 3, 0 ),
+"one_way": false,
+"one_way_margin": 1.0,
+"shape": SubResource( 14 ),
+"shape_transform": Transform2D( 1, 0, 0, 1, 0, 0 )
+}, {
 "autotile_coord": Vector2( 3, 0 ),
 "one_way": false,
 "one_way_margin": 1.0,
@@ -283,28 +294,22 @@ points = PoolVector2Array( 0, 0, 32, 0, 32, 32, 0, 32 )
 "shape": SubResource( 16 ),
 "shape_transform": Transform2D( 1, 0, 0, 1, 0, 0 )
 }, {
-"autotile_coord": Vector2( 3, 0 ),
+"autotile_coord": Vector2( 0, 0 ),
 "one_way": false,
 "one_way_margin": 1.0,
 "shape": SubResource( 17 ),
 "shape_transform": Transform2D( 1, 0, 0, 1, 0, 0 )
 }, {
-"autotile_coord": Vector2( 0, 0 ),
+"autotile_coord": Vector2( 1, 0 ),
 "one_way": false,
 "one_way_margin": 1.0,
 "shape": SubResource( 18 ),
 "shape_transform": Transform2D( 1, 0, 0, 1, 0, 0 )
 }, {
-"autotile_coord": Vector2( 1, 0 ),
-"one_way": false,
-"one_way_margin": 1.0,
-"shape": SubResource( 19 ),
-"shape_transform": Transform2D( 1, 0, 0, 1, 0, 0 )
-}, {
 "autotile_coord": Vector2( 2, 0 ),
 "one_way": false,
 "one_way_margin": 1.0,
-"shape": SubResource( 20 ),
+"shape": SubResource( 19 ),
 "shape_transform": Transform2D( 1, 0, 0, 1, 0, 0 )
 } ]
 2/z_index = 0
@@ -327,38 +332,38 @@ points = PoolVector2Array( 0, 0, 32, 0, 32, 32, 0, 32 )
 3/navigation_offset = Vector2( 0, 0 )
 3/shape_offset = Vector2( 0, 0 )
 3/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
-3/shape = SubResource( 21 )
+3/shape = SubResource( 20 )
 3/shape_one_way = false
 3/shape_one_way_margin = 1.0
 3/shapes = [ {
 "autotile_coord": Vector2( 0, 0 ),
 "one_way": false,
 "one_way_margin": 1.0,
-"shape": SubResource( 21 ),
+"shape": SubResource( 20 ),
 "shape_transform": Transform2D( 1, 0, 0, 1, 0, 0 )
 }, {
 "autotile_coord": Vector2( 0, 0 ),
 "one_way": false,
 "one_way_margin": 1.0,
-"shape": SubResource( 22 ),
+"shape": SubResource( 21 ),
 "shape_transform": Transform2D( 1, 0, 0, 1, 0, 0 )
 }, {
 "autotile_coord": Vector2( 1, 0 ),
 "one_way": false,
 "one_way_margin": 1.0,
-"shape": SubResource( 23 ),
+"shape": SubResource( 22 ),
 "shape_transform": Transform2D( 1, 0, 0, 1, 0, 0 )
 }, {
 "autotile_coord": Vector2( 2, 0 ),
 "one_way": false,
 "one_way_margin": 1.0,
-"shape": SubResource( 24 ),
+"shape": SubResource( 23 ),
 "shape_transform": Transform2D( 1, 0, 0, 1, 0, 0 )
 }, {
 "autotile_coord": Vector2( 3, 0 ),
 "one_way": false,
 "one_way_margin": 1.0,
-"shape": SubResource( 25 ),
+"shape": SubResource( 24 ),
 "shape_transform": Transform2D( 1, 0, 0, 1, 0, 0 )
 } ]
 3/z_index = 0
@@ -484,7 +489,6 @@ __meta__ = {
 }
 
 [node name="MsgBox" type="Node2D" parent="CanvasLayer/MsgCont"]
-visible = false
 position = Vector2( 320, 250 )
 scale = Vector2( 0.75, 0.75 )
 
@@ -492,21 +496,26 @@ scale = Vector2( 0.75, 0.75 )
 
 [node name="YouWin" type="Node2D" parent="CanvasLayer/MsgCont/MsgBox"]
 visible = false
+position = Vector2( 0, -13.3333 )
 
 [node name="Label" type="Label" parent="CanvasLayer/MsgCont/MsgBox/YouWin"]
-margin_left = -96.0
-margin_top = -56.0
-margin_right = 132.0
-margin_bottom = 57.0
+margin_left = -106.667
+margin_top = -64.0
+margin_right = 121.333
+margin_bottom = 58.0
 text = "You Win!!
-You are
-the
+You are the
 Lord Of The Flies!!"
 align = 1
 valign = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="Btn" parent="CanvasLayer/MsgCont/MsgBox/YouWin" instance=ExtResource( 8 )]
+margin_top = 42.6667
+margin_bottom = 42.6667
+label = "receive my payment of $1,000,000"
 
 [node name="YouLose" type="Node2D" parent="CanvasLayer/MsgCont/MsgBox"]
 visible = false
@@ -585,8 +594,8 @@ margin_right = 170.667
 margin_bottom = -13.3334
 
 [node name="msg" type="AnimationPlayer" parent="CanvasLayer/MsgCont"]
-anims/resume_inverse = SubResource( 3 )
-anims/show = SubResource( 4 )
+anims/resume_inverse = SubResource( 2 )
+anims/show = SubResource( 3 )
 
 [node name="Pause" parent="CanvasLayer" instance=ExtResource( 5 )]
 margin_left = 544.0
@@ -602,12 +611,12 @@ current = true
 position = Vector2( 0, -4300 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Triggers/WinTrigger"]
-shape = SubResource( 5 )
+shape = SubResource( 4 )
 
 [node name="FancyBg" type="Node2D" parent="."]
 
 [node name="TileMap" type="TileMap" parent="."]
-tile_set = SubResource( 26 )
+tile_set = SubResource( 25 )
 cell_size = Vector2( 32, 32 )
 format = 1
 
@@ -638,11 +647,6 @@ autostart = true
 wait_time = 0.2
 autostart = true
 
-[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
-pause_mode = 2
-stream = ExtResource( 4 )
-autoplay = true
-
 [node name="TenMoreFlies" type="Timer" parent="."]
 wait_time = 0.4
 one_shot = true
@@ -651,6 +655,31 @@ one_shot = true
 wait_time = 6.0
 one_shot = true
 autostart = true
+
+[node name="Music" type="AudioStreamPlayer" parent="."]
+pause_mode = 2
+stream = ExtResource( 4 )
+
+[node name="lost" type="AudioStreamPlayer" parent="."]
+pause_mode = 2
+stream = ExtResource( 18 )
+
+[node name="won" type="AudioStreamPlayer" parent="."]
+pause_mode = 2
+stream = ExtResource( 17 )
+
+[node name="egghatch" type="AudioStreamPlayer" parent="."]
+pause_mode = 2
+stream = ExtResource( 15 )
+
+[node name="callout" type="AudioStreamPlayer" parent="."]
+pause_mode = 2
+stream = ExtResource( 14 )
+volume_db = -8.0
+
+[node name="powerUp" type="AudioStreamPlayer" parent="."]
+pause_mode = 2
+stream = ExtResource( 16 )
 [connection signal="animation_finished" from="CanvasLayer/hint/anim" to="." method="_on_anim_animation_finished"]
 [connection signal="animation_finished" from="CanvasLayer/MsgCont/msg" to="." method="_on_msg_animation_finished"]
 [connection signal="body_entered" from="Triggers/WinTrigger" to="." method="_on_WinTrigger_body_entered"]

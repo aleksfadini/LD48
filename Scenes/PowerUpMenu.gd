@@ -18,6 +18,7 @@ func resume():
 #func quit():
 #	get_tree().change_scene("res://Scenes/Title.tscn")
 func init():
+	$Label.text=txt.powerUpSentences[randi()%txt.powerUpSentences.size()]
 	pick_rand_powers()
 	$power1.label=power1
 	$power2.label=power2

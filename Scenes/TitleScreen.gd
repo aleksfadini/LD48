@@ -14,13 +14,15 @@ func _ready():
 	$CanvasLayer/Intro/skip.get_child(1).connect("pressed",self,"start")
 	$CanvasLayer/Intro/Bg/SpeechContainer.scroll_vertical=-100
 	$CanvasLayer/Intro/Bg/SpeechContainer/Speech.text=txt.introSpeech
+	$Lord.play()
+	
 	pass # Replace with function body.
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
-	if scroll:
-		$CanvasLayer/Intro/Bg/SpeechContainer.scroll_vertical+=1
+#func _process(delta):
+#	if scroll:
+#		$CanvasLayer/Intro/Bg/SpeechContainer.scroll_vertical+=0.2
 #	pass
 
 func start():
@@ -34,5 +36,20 @@ func intro():
 
 
 func _on_intro_animation_finished(anim_name):
+	$Speech/scrollTimer.start()
 	scroll=true
+	$Speech.play()
+	pass # Replace with function body.
+
+
+func _on_open_animation_finished(anim_name):
+	if anim_name == "show":
+		pass
+#		$Lord.play()
+	pass # Replace with function body.
+
+
+func _on_scrollTimer_timeout():
+	$CanvasLayer/Intro/Bg/SpeechContainer.scroll_vertical+=1
+	
 	pass # Replace with function body.

@@ -20,4 +20,5 @@ func init():
 
 func _on_Button_button_down():
 	$AnimationPlayer.play("pressed")
+	$AudioStreamPlayer.play()
 	pass # Replace with function body.
